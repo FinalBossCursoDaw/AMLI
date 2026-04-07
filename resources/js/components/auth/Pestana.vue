@@ -6,8 +6,6 @@ import pestanaImg from '/imagenes/pestana.png';
 <template>
   <div class="container-background">
     <img :src="pestanaImg" alt="Background" class="background-image" />
-  
-    <img src="/imagenes/pestana.png" alt="Background" class="background-image" />
   </div>
 </template>
 

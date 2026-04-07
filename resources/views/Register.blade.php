@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Registro - AMLI</title>
-    @vite(['resources/js/app.ts'])
+
+    <!-- Google Fonts - Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-    <main class="min-h-screen bg-[#f3f1f3]">
+    <div id="app">
+        <main class="min-h-screen bg-[#f3f1f3]">
         <section class="flex min-h-screen w-full">
             <div class="relative min-h-screen w-full overflow-hidden bg-[#f3f1f3]">
                 <img
@@ -51,7 +58,6 @@
             </div>
         </section>
     </main>
-
-  
+    </div>
 </body>
 </html>
