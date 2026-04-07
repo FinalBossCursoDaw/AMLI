@@ -7,7 +7,8 @@ Route::get('/contacto', function () {
     return Inertia::render('auth/Contacto');
 })->name('contacto');
 
+
 Route::get('/register', function () {
-    return Inertia::render('auth/Register');
+    return view('Register');
 })->name('register');
 
