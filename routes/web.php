@@ -2,13 +2,12 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
 
 Route::get('/contacto', function () {
     return view('Contacto');
 })->name('contacto');
 
 
-Route::get('/register', function () {
-    return view('Register');
-})->name('register');
+Route::view('/register', 'Register')->name('login');
 
