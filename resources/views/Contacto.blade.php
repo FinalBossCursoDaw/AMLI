@@ -29,9 +29,7 @@
                     <h2 class="text-4xl font-semibold text-gray-800 mb-8">
                         ¿Ya formas parte de AMLI?
                     </h2>
-                    <a href="/register" class="bg-red-600 text-white px-20 py-4 rounded-lg text-xl font-semibold hover:bg-red-700 transition-colors">
-                        Iniciar Sesión
-                    </a>
+                            <boton-degradado text="Iniciar Sesión" :show-arrow="false" href="/register"></boton-degradado>
                 </div>
 
                 <div class="flex items-center">
