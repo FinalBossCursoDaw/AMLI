@@ -22,21 +22,26 @@ class LoginController extends Controller
             'contrasenya' => 'required',
         ]);
 
-        // 2. Intentar hacer login
-        $credentials = [
-            'correu' => $request->correu,
-            'password' => $request->contrasenya,  // Laravel busca 'password' internamente
-        ];
-
-        if (Auth::attempt($credentials)) {
-            // 3. Login exitoso → redirigir al dashboard
-            return redirect()->intended('/dashboard');
+        // 2. Buscar el usuario manualmente para debug
+        $user = \App\Models\Usuari::where('correu', $request->correu)->first();
+        
+        if (!$user) {
+            return response()->json([
+                'errors' => ['correu' => ['Usuario no encontrado.']]
+            ], 422);
         }
 
-        // 4. Login fallido → volver con error
-        return back()->withErrors([
-            'correu' => 'Credenciales incorrectas.',
-        ]);
+        // 3. Verificar contraseña manualmente
+        if (!\Illuminate\Support\Facades\Hash::check($request->contrasenya, $user->contrasenya)) {
+            return response()->json([
+                'errors' => ['correu' => ['Contraseña incorrecta.']]
+            ], 422);
+        }
+
+        // 4. Login manual
+        Auth::login($user);
+
+        return response()->json(['success' => true]);
     }
 
     // Cerrar sesión
