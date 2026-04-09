@@ -7,6 +7,7 @@ import InfoAdicional from './components/auth/InfoAdicional.vue';
 import Input from './components/auth/Input.vue';
 import BotonDegraciado from './components/auth/BotonDegraciado.vue';
 import RegisterPage from './paginas/Register.vue';
+import Contacto from './paginas/Contacto.vue';
 
 const app = createApp({});
 
@@ -17,5 +18,5 @@ app.component('info-adicional', InfoAdicional);
 app.component('input-component', Input);
 app.component('boton-degradado', BotonDegraciado);
 app.component('register-page', RegisterPage);
-
+app.component('contacto-page', Contacto);
 app.mount('#app');

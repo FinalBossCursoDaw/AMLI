@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Usuari extends Authenticatable
 {
+    public $timestamps = false;
     protected $table = 'usuaris';
 
     protected $fillable = [
@@ -27,5 +28,8 @@ class Usuari extends Authenticatable
         return $this->contrasenya;
     }
 
-   
+    public function username()
+    {
+        return 'correu';
+    }
 }

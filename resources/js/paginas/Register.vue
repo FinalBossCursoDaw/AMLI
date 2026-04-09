@@ -1,3 +1,4 @@
+VICTOR CALVO BARJA, 1 min
 <script setup lang="ts">
 import { ref } from 'vue';
 import HeaderComponent from '../components/auth/Header.vue';
@@ -16,7 +17,7 @@ const handleLogin = async () => {
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     try {
-        const response = await fetch('/register', {
+        const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
