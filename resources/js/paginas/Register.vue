@@ -16,7 +16,7 @@ const handleLogin = async () => {
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     try {
-        const response = await fetch('/register', {
+        const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
