@@ -11,3 +11,9 @@ Route::get('/contacto', function () {
 
 Route::view('/register', 'Register')->name('login');
 
+Route::get('/quienes-somos', function () {
+    return view('quienes-somos');
+})->name('quienes-somos');
+
+
+
