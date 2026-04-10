@@ -1,8 +1,11 @@
 <?php
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
+
+
+Route::view('/anadir-cliente', 'AnadirCliente')->name('anadir-cliente');
+
+
 
 Route::get('/contacto', function () {
     return view('Contacto');
