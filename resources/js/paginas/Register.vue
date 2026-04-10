@@ -30,7 +30,7 @@ const handleLogin = async () => {
         });
 
         if (response.ok) {
-            window.location.href = '/contacto';
+            window.location.href = '/dashboard-admin';
         } else {
             const data = await response.json();
             error.value = data.errors?.correu?.[0] || 'Credenciales incorrectas';
