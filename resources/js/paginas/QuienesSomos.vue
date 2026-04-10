@@ -1,7 +1,10 @@
 <template>
     <header-component />
-    <main class="min-h-screen bg-[#f3f1f3] relative">  
- <div class="container mx-auto px-4 pt-24 pb-12 ">
+    <main class="min-h-screen bg-[#f3f1f3] relative overflow-hidden">
+        <!-- Elemento decorativo -->
+        
+        
+ <div class="container mx-auto px-4 pt-24 pb-12 relative z-10">
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-32">
             
@@ -24,50 +27,22 @@
                             <boton-degradado 
                                 text="Entra en AMLI" 
                                 :show-arrow="true"
+                                  href="/register"
                             />
                 </div>
             </div>
             
             <!-- Imagen Derecha -->
-            <div class="flex justify-center">
+            <div class="flex flex-col items-center">
                 <img src="/imagenes/caminion.png" alt="Camión AMLI" class="max-w-full h-auto">
+                
             </div>
         </div>
         
         <cards-component />
       
         <!-- Nuestros valores -->
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold mb-8">
-                Nuestros <span class="text-red-600">valores</span>
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Eficiencia -->
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <div class="text-3xl mb-2">⚡</div>
-                    <h4 class="font-bold text-lg">Eficiencia</h4>
-                </div>
-                
-                <!-- Transparencia -->
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <div class="text-3xl mb-2">🔍</div>
-                    <h4 class="font-bold text-lg">Transparencia</h4>
-                </div>
-                
-                <!-- Innovación -->
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <div class="text-3xl mb-2">💡</div>
-                    <h4 class="font-bold text-lg">Innovación</h4>
-                </div>
-                
-                <!-- Confianza -->
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <div class="text-3xl mb-2">🤝</div>
-                    <h4 class="font-bold text-lg">Confianza</h4>
-                </div>
-            </div>
-        </div>
+       <valores-component />
     </div>
 
     </main>

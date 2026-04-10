@@ -15,5 +15,6 @@ Route::get('/quienes-somos', function () {
     return view('quienes-somos');
 })->name('quienes-somos');
 
-
-
+Route::get('/dashboard-admin', function () {
+    return view('DashboardAdmin');
+})->name('dashboard-admin');
