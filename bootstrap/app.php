@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             AddLinkHeadersForPreloadedAssets::class,
             \Inertia\Middleware::class,
-        ]);
+        ]);     
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

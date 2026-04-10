@@ -16,32 +16,38 @@ class LoginController extends Controller
     // Procesar el login
     public function login(Request $request)
     {
-        // 1. Validar que lleguen los campos
-        $request->validate([
-            'correu' => 'required|email',
-            'contrasenya' => 'required',
-        ]);
+        try {
+            // 1. Validar que lleguen los campos
+            $request->validate([
+                'correu' => 'required|email',
+                'contrasenya' => 'required',
+            ]);
 
-        // 2. Buscar el usuario manualmente para debug
-        $user = \App\Models\Usuari::where('correu', $request->correu)->first();
-        
-        if (!$user) {
+            // 2. Buscar el usuario manualmente para debug
+            $user = \App\Models\Usuari::where('correu', $request->correu)->first();
+            
+            if (!$user) {
+                return response()->json([
+                    'errors' => ['correu' => ['Usuario no encontrado.']]
+                ], 422);
+            }
+
+            // 3. Verificar contraseña manualmente
+            if ($request->contrasenya !== $user->contrasenya) {
+                return response()->json([
+                    'errors' => ['correu' => ['Contraseña incorrecta.']]
+                ], 422);
+            }
+
+            // 4. Login manual
+            Auth::login($user);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
             return response()->json([
-                'errors' => ['correu' => ['Usuario no encontrado.']]
-            ], 422);
+                'error' => 'Error en el servidor: ' . $e->getMessage()
+            ], 500);
         }
-
-        // 3. Verificar contraseña manualmente
-        if (!\Illuminate\Support\Facades\Hash::check($request->contrasenya, $user->contrasenya)) {
-            return response()->json([
-                'errors' => ['correu' => ['Contraseña incorrecta.']]
-            ], 422);
-        }
-
-        // 4. Login manual
-        Auth::login($user);
-
-        return response()->json(['success' => true]);
     }
 
     // Cerrar sesión
