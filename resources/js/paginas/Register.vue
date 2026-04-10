@@ -1,4 +1,3 @@
-VICTOR CALVO BARJA, 1 min
 <script setup lang="ts">
 import { ref } from 'vue';
 import HeaderComponent from '../components/auth/Header.vue';

@@ -8,6 +8,7 @@ import Input from './components/auth/Input.vue';
 import BotonDegraciado from './components/auth/BotonDegraciado.vue';
 import RegisterPage from './paginas/Register.vue';
 import Contacto from './paginas/Contacto.vue';
+import EditarCliente from './paginas/EditarCliente.vue';
 
 const app = createApp({});
 
@@ -19,4 +20,5 @@ app.component('input-component', Input);
 app.component('boton-degradado', BotonDegraciado);
 app.component('register-page', RegisterPage);
 app.component('contacto-page', Contacto);
+app.component('editar-cliente-page', EditarCliente);
 app.mount('#app');
