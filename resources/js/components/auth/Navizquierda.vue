@@ -1,4 +1,4 @@
-<script setup lang="ts">
+quiero<script setup lang="ts">
 import { computed } from 'vue';
 
 interface MenuItem {
@@ -42,7 +42,7 @@ const isImageIcon = (item: MenuItem) => {
 </script>
 
 <template>
-    <aside class="fixed left-0 top-0 h-screen w-72 bg-gradient-to-b from-[#cb0c14] to-[#a00a0f] shadow-lg flex flex-col">
+    <aside class="fixed left-0 top-0 h-screen w-56 bg-gradient-to-b from-[#cb0c14] to-[#a00a0f] shadow-lg flex flex-col">
       
         <!-- Espaciador superior -->
         <div class="flex-none h-40"></div>
@@ -54,33 +54,33 @@ const isImageIcon = (item: MenuItem) => {
                     <a
                         :href="item.path"
                         :class="[
-                            'flex items-center px-6 py-6 text-white transition-all duration-300',
+                            'flex items-center px-4 py-4 text-white transition-all duration-300',
                             'hover:bg-white hover:bg-opacity-20',
                             isActive(item.path) ? 'bg-white bg-opacity-25 border-r-4 border-white' : 'border-r-4 border-transparent'
                         ]"
                     >
                         <!-- Icono: Imagen o Emoji -->
-                        <div class="mr-4 flex-shrink-0">
+                        <div class="mr-3 flex-shrink-0">
                             <img 
                                 v-if="isImageIcon(item)"
                                 :src="item.icon"
                                 :alt="item.label"
-                                class="h-8 w-8 object-contain"
+                                class="h-6 w-6 object-contain"
                             />
-                            <span v-else class="text-3xl">{{ item.icon }}</span>
+                            <span v-else class="text-2xl">{{ item.icon }}</span>
                         </div>
                         
                         <!-- Etiqueta -->
-                        <span class="font-montserrat font-semibold text-lg">{{ item.label }}</span>
+                        <span class="font-montserrat font-semibold text-base">{{ item.label }}</span>
                     </a>
                 </li>
             </ul>
         </nav>
 
         <!-- Footer Section (Optional - for logout or user info) -->
-        <div class="py-6 px-6 border-t-2 border-white border-opacity-20">
+        <div class="py-4 px-4 border-t-2 border-white border-opacity-20">
             <button 
-                class="w-full flex items-center justify-center py-3 px-4 rounded-lg bg-white bg-opacity-20 text-white font-montserrat font-semibold hover:bg-opacity-30 transition-all duration-300"
+                class="w-full flex items-center justify-center py-2 px-3 rounded-lg bg-white bg-opacity-20 text-white font-montserrat font-semibold hover:bg-opacity-30 transition-all duration-300 text-sm"
             >
                 <span class="mr-2">🚪</span>
                 Cerrar sesión
@@ -89,7 +89,7 @@ const isImageIcon = (item: MenuItem) => {
     </aside>
 
     <!-- Ancho -->
-    <div class="ml-72"></div>
+    <div class="ml-56"></div>
 </template>
 
 <style scoped>
