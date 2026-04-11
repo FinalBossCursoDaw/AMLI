@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/anadir-cliente', 'AnadirCliente')->name('anadir-cliente');
 
+Route::view('/editar-cliente', 'EditarCliente')->name('editar-cliente');
 
 
 Route::get('/contacto', function () {
@@ -21,3 +22,4 @@ Route::get('/quienes-somos', function () {
 Route::get('/dashboard-admin', function () {
     return view('DashboardAdmin');
 })->name('dashboard-admin');
+

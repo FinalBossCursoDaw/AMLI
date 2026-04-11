@@ -6,12 +6,12 @@
             class="w-full h-auto block"
         />
 
-        <div class="absolute inset-y-0 left-[36%] sm:left-[24%] flex items-center">
+        <div class="absolute inset-y-0 left-56 sm:left-72 lg:left-80 flex items-center">
             <div class="flex items-center gap-2 sm:gap-10">
-                <h1 class="text-[14px] sm:text-[40px] font-montserrat font-bold text-[#303030] leading-none">
+                <h1 class="text-[14px] sm:text-[28px] font-montserrat font-bold text-[#303030] leading-none">
                     {{ title }}
                 </h1>
-                <p class="text-[10px] sm:text-[34px] font-normal text-[#a5a5a5] leading-none">
+                <p class="text-[10px] sm:text-[22px] font-normal text-[#a5a5a5] leading-none">
                     {{ subtitle }}
                 </p>
             </div>
