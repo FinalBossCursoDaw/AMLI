@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
             id: 'dashboard',
             label: 'Dashboard',
             icon: '🏠',
-            path: '/dashboard',
+            path: '/dashboard-admin',
             iconType: 'emoji'
         },
         {

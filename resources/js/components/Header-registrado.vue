@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-full pt-3 px-2 sm:pl-24 sm:pr-6">
+    <div class="relative z-50 w-full pt-3 px-2 sm:pl-24 sm:pr-6">
         <img
             src="/imagenes/barraheader.png"
             alt="header"

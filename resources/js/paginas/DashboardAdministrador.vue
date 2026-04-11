@@ -40,7 +40,7 @@ const menuItems = [
         id: 'clientes',
         label: 'Clientes',
         icon: '/imagenes/cliente.png',
-        path: '/anadir-cliente',
+        path: '/clientes',
         iconType: 'image',
     },
 ];

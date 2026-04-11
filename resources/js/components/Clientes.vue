@@ -3,11 +3,12 @@
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-[#303030]">Clientes</h1>
-            <button 
-                class="text-white px-6 py-2 rounded-lg font-medium transition-all bg-[#54805B] border border-[#E5E2F4] shadow-md hover:shadow-lg"
+            <a 
+                href="/anadir-cliente"
+                class="text-white px-6 py-2 rounded-lg font-medium transition-all bg-[#54805B] border border-[#E5E2F4] shadow-md hover:shadow-lg inline-block"
             >
                 Añadir Cliente
-            </button>
+            </a>
         </div>
 
         <!-- Filtros -->
