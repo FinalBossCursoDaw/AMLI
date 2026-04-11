@@ -1,18 +1,18 @@
 import './bootstrap';
 import { createApp, defineAsyncComponent } from 'vue/dist/vue.esm-bundler';
-import Pestana from './components/auth/Pestana.vue';
-import Header from './components/auth/Header.vue';
-import HeaderRegistrado from './components/auth/Header-registrado.vue';
-import CajasContacto from './components/auth/CajasContacto.vue';
-import InfoAdicional from './components/auth/InfoAdicional.vue';
-import Input from './components/auth/Input.vue';
-import BotonDegraciado from './components/auth/BotonDegraciado.vue';
-import CardsComponent from './components/auth/CardsComponent.vue';
+import Pestana from './components/Pestana.vue';
+import Header from './components/Header.vue';
+import HeaderRegistrado from './components/Header-registrado.vue';
+import CajasContacto from './components/CajasContacto.vue';
+import InfoAdicional from './components/InfoAdicional.vue';
+import Input from './components/Input.vue';
+import BotonDegraciado from './components/BotonDegraciado.vue';
+import CardsComponent from './components/CardsComponent.vue';
 import RegisterPage from './paginas/Register.vue';
 import Contacto from './paginas/Contacto.vue';
 import EditarCliente from './paginas/EditarCliente.vue';
 import QuienesSomos from './paginas/QuienesSomos.vue';
-import Valores from './components/auth/Valores.vue';
+import Valores from './components/Valores.vue';
 import DashboardAdministrador from './paginas/DashboardAdministrador.vue';
 
 const app = createApp({});
