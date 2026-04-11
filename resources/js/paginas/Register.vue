@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import HeaderComponent from '../components/auth/Header.vue';
-import InputComponent from '../components/auth/Input.vue';
-import BotonDegradado from '../components/auth/BotonDegraciado.vue';
+import HeaderComponent from '../components/Header.vue';
+import InputComponent from '../components/Input.vue';
+import BotonDegradado from '../components/BotonDegraciado.vue';
 
 const correu = ref('');
 const contrasenya = ref('');
@@ -14,9 +14,10 @@ const handleLogin = async () => {
     error.value = '';
 
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const registerUrl = new URL('/api/register', window.location.origin).toString();
 
     try {
-        const response = await fetch('/api/register', {
+        const response = await fetch(registerUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,13 +31,14 @@ const handleLogin = async () => {
         });
 
         if (response.ok) {
-            window.location.href = '/dashboard-admin';
-        } else {
-            const data = await response.json();
-            error.value = data.errors?.correu?.[0] || 'Credenciales incorrectas';
+            window.location.href = new URL('dashboard-admin', window.location.href).toString();
+            return;
         }
+
+        const data = await response.json().catch(() => ({}));
+        error.value = data.errors?.correu?.[0] || data.error || 'Credenciales incorrectas';
     } catch (e) {
-        error.value = 'Error de conexión';
+        error.value = 'Error de conexion';
     } finally {
         loading.value = false;
     }
@@ -57,16 +59,16 @@ const handleLogin = async () => {
 
                 <div class="absolute right-[120px] top-1/2 z-20 hidden h-[560px] w-[420px] -translate-y-1/2 rounded-[22px] border border-[#e6dfdf] bg-white shadow-[0_8px_20px_rgba(0,0,0,0.18)] lg:block xl:right-[220px] xl:h-[590px] xl:w-[450px]">
                     <div class="flex flex-col px-12 pt-12">
-                        <h2 class="font-montserrat text-4xl font-extrabold text-[#2F2E30] mb-3 text-center">
-                            Iniciar sesión
+                        <h2 class="mb-3 text-center font-montserrat text-4xl font-extrabold text-[#2F2E30]">
+                            Iniciar sesion
                         </h2>
-                        <p class="font-montserrat text-lg text-[#AAABAA] mb-8 text-center">
+                        <p class="mb-8 text-center font-montserrat text-lg text-[#AAABAA]">
                             Introduce tus credenciales
                         </p>
 
-                        <p v-if="error" class="text-red-500 text-sm mb-4">{{ error }}</p>
+                        <p v-if="error" class="mb-4 text-sm text-red-500">{{ error }}</p>
 
-                        <p class="font-montserrat text-sm text-[#2F2E30] mb-2 font-semibold mt-8">Email</p>
+                        <p class="mt-8 mb-2 font-montserrat text-sm font-semibold text-[#2F2E30]">Email</p>
                         <InputComponent
                             v-model="correu"
                             placeholder="Introduce el email"
@@ -74,19 +76,20 @@ const handleLogin = async () => {
                             icon="email"
                         />
 
-                        <p class="font-montserrat text-sm text-[#2F2E30] mb-2 font-semibold mt-8">Contraseña</p>
+                        <p class="mt-8 mb-2 font-montserrat text-sm font-semibold text-[#2F2E30]">Contrasena</p>
                         <InputComponent
                             v-model="contrasenya"
-                            placeholder="Introduce la contraseña"
+                            placeholder="Introduce la contrasena"
                             type="password"
                             icon="lock"
                         />
 
                         <div class="mt-8">
-                            <BotonDegradado 
-                                text="Entrar" 
+                            <BotonDegradado
+                                text="Entrar"
                                 :show-arrow="true"
                                 :disabled="loading"
+                                type="button"
                                 @click="handleLogin"
                             />
                         </div>
@@ -108,10 +111,10 @@ const handleLogin = async () => {
                 </div>
 
                 <div class="relative mt-40 flex items-end justify-center sm:mt-44 lg:justify-start">
-                    <img 
+                    <img
                         alt="Camion de AMLI Logistics"
                         class="pointer-events-none relative z-10 w-[650px] max-w-[140%] translate-x-8 select-none drop-shadow-[0_24px_30px_rgba(0,0,0,0.2)] sm:w-[800px] sm:max-w-[125%] sm:translate-x-12 lg:w-[920px] lg:max-w-none lg:translate-x-16"
-                        src="/imagenes/caminion.png" 
+                        src="/imagenes/caminion.png"
                     />
                 </div>
             </div>

@@ -16,6 +16,10 @@ const props = defineProps({
   href: {
     type: String,
     default: null
+  },
+  type: {
+    type: String,
+    default: 'button'
   }
 });
 
@@ -56,6 +60,7 @@ const handleClick = () => {
   <button
     v-else
     @click="handleClick"
+    :type="type"
     :disabled="disabled"
     class="group relative flex w-full items-center justify-between overflow-hidden rounded-lg px-6 py-4 font-montserrat text-base font-semibold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
     :style="{
