@@ -23,3 +23,6 @@ Route::get('/dashboard-admin', function () {
     return view('DashboardAdmin');
 })->name('dashboard-admin');
 
+Route::get('/dashboard-operador-cliente', function () {
+    return view('DashboardOperadorCliente');
+})->name('dashboard-operador-cliente');
