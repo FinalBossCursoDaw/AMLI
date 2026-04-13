@@ -7,6 +7,8 @@ Route::view('/anadir-cliente', 'AnadirCliente')->name('anadir-cliente');
 
 Route::view('/editar-cliente', 'EditarCliente')->name('editar-cliente');
 
+Route::view('/ofertas', 'Ofertas')->name('ofertas');
+
 
 Route::get('/contacto', function () {
     return view('Contacto');

@@ -1,8 +1,23 @@
-<script setup>
+<script setup lang="ts">
+import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
 import HeaderRegistrado from '../components/Header-registrado.vue';
 import NavIzquierda from '../components/Navizquierda.vue';
+import type { Component } from 'vue';
 
-const menuItems = [
+interface MenuItem {
+    id: string;
+    label: string;
+    icon: string;
+    path: string;
+    iconType: 'image' | 'emoji' | 'component';
+    iconComponent?: Component;
+}
+
+const propiedades = defineProps<{
+    tipoMenu?: string;
+}>();
+
+const menuAdministrador: MenuItem[] = [
     {
         id: 'dashboard',
         label: 'Dashboard',
@@ -18,6 +33,41 @@ const menuItems = [
         iconType: 'image',
     },
 ];
+
+const menuOperador: MenuItem[] = [
+    {
+        id: 'dashboard',
+        label: 'Dashboard',
+        icon: '/imagenes/casita.png',
+        path: '/dashboard-operador-cliente',
+        iconType: 'image',
+    },
+    {
+        id: 'clientes',
+        label: 'Clientes',
+        icon: '/imagenes/cliente.png',
+        path: '/anadir-cliente',
+        iconType: 'image',
+    },
+    {
+        id: 'ofertas',
+        label: 'Ofertas',
+        icon: '',
+        path: '/ofertas',
+        iconType: 'component',
+        iconComponent: ClipboardDocumentListIcon,
+    },
+    {
+        id: 'operaciones',
+        label: 'Operaciones',
+        icon: '',
+        path: '/dashboard-operador-cliente#operaciones',
+        iconType: 'component',
+        iconComponent: FolderIcon,
+    },
+];
+
+const menuLateral = propiedades.tipoMenu === 'admin' ? menuAdministrador : menuOperador;
 </script>
 
 <template>
@@ -29,7 +79,7 @@ const menuItems = [
             />
         </div>
 
-        <NavIzquierda :items="menuItems" />
+        <NavIzquierda :items="menuLateral" />
 
         <section class="pl-72 pr-8 pt-32 sm:pr-10">
             <div class="mx-auto max-w-5xl">
