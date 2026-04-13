@@ -31,7 +31,9 @@ const handleLogin = async () => {
         });
 
         if (response.ok) {
-            window.location.href = new URL('dashboard-admin', window.location.href).toString();
+            const data = await response.json().catch(() => ({}));
+            const redirectPath = data.redirect || '/dashboard-admin';
+            window.location.href = new URL(redirectPath, window.location.origin).toString();
             return;
         }
 

@@ -1,0 +1,37 @@
+<script setup>
+import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
+import NavIzquierda from '../components/Navizquierda.vue';
+
+const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
+    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/anadir-cliente', iconType: 'image' },
+    { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
+    { id: 'operaciones', label: 'Operaciones', icon: '', path: '/dashboard-operador-cliente#operaciones', iconType: 'component', iconComponent: FolderIcon },
+];
+</script>
+
+<template>
+    <main class="min-h-screen bg-[#f3f1f3]">
+        <div class="fixed inset-x-0 top-0 z-30">
+            <header-registrado title="Dashboard" subtitle="Resumen de tu actividad" />
+        </div>
+
+        <NavIzquierda :items="menuItems" />
+
+        <section class="pl-72 pr-8 pt-32 sm:pr-10">
+            <div class="mx-auto max-w-[1080px]">
+                <resumen-operador />
+
+                <div class="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
+                    <div class="space-y-5">
+                        <acciones-rapidas-operador />
+                        <ofertas-recientes-operador />
+                        <operaciones-recientes-operador />
+                    </div>
+
+                    <notificaciones-operador />
+                </div>
+            </div>
+        </section>
+    </main>
+</template>

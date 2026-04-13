@@ -42,7 +42,16 @@ class LoginController extends Controller
             // 4. Login manual
             Auth::login($user);
 
-            return response()->json(['success' => true]);
+            if ($user->rol_id == 1) {
+                $redirect = '/dashboard-admin';
+            } else {
+                $redirect = '/dashboard-operador-cliente';
+            }
+
+            return response()->json([
+                'success' => true,
+                'redirect' => $redirect,
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Error en el servidor: ' . $e->getMessage()

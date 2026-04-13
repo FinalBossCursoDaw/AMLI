@@ -12,7 +12,11 @@
 </head>
 <body>
     <div id="app">
-        <editar-cliente></editar-cliente>
+        @if(optional(auth()->user())->rol_id === 1)
+            <editar-cliente tipo-menu="admin"></editar-cliente>
+        @else
+            <editar-cliente tipo-menu="operador"></editar-cliente>
+        @endif
     </div>
 </body>
 </html>
