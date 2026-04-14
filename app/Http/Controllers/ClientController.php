@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Client;
-use App\Models\Pais;
-use App\Models\Ciutat;
 
 
 class ClientController extends Controller
@@ -44,20 +43,87 @@ class ClientController extends Controller
     }
         return response()->json($client);
     }
-    public function paissos()
-{
-    $paissos = Pais::orderBy('nom')->get();
+    
+    public function paises()
+    {
+        try {
+            $paises = DB::table('paissos')
+                ->select('id', 'nom')
+                ->orderBy('nom')
+                ->get();
 
-    return response()->json($paissos);
+            return response()->json($paises);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function ciutats($paisId)
+    {
+        $ciutats = DB::table('ciutats')
+            ->where('pais_id', $paisId)
+            ->select('id', 'nom')
+            ->orderBy('nom')
+            ->get();
+
+        return response()->json($ciutats);
+    }
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nom_empresa' => 'required|string|max:150',
+        'cif_nif' => 'required|string|max:30|unique:clients,cif_nif',
+        'pais_id' => 'required|integer|exists:paissos,id',
+        'ciutat' => 'required|string|max:100',
+        'codi_postal' => 'nullable|string|max:20',
+        'adreca' => 'required|string|max:200',
+        'contacte' => 'required|string|max:100',
+        'email' => 'required|email|max:150',
+        'telefon' => 'required|string|max:30',
+        'observacions' => 'nullable|string|max:500',
+    ]);
+
+    try {
+        $codiClient = $this->generateClientCode();
+
+        $client = Client::create([
+            'codi_client' => $codiClient,
+            'nom_empresa' => $validated['nom_empresa'],
+            'cif_nif' => $validated['cif_nif'],
+            'adreca' => $validated['adreca'],
+            'ciutat' => $validated['ciutat'],
+            'codi_postal' => $validated['codi_postal'] ?? '',
+            'pais_id' => $validated['pais_id'],
+            'contacte' => $validated['contacte'],
+            'email' => $validated['email'],
+            'telefon' => $validated['telefon'],
+            'observacions' => $validated['observacions'] ?? '',
+            'actiu' => 1,
+            'data_creacio' => DB::raw('GETDATE()'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cliente creado correctamente.',
+            'client' => $client
+        ], 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al crear el cliente: ' . $e->getMessage()
+        ], 500);
+    }
 }
 
-public function ciutats($paisId)
+private function generateClientCode(): string
 {
-    $ciutats = Ciutat::where('pais_id', $paisId)
-        ->orderBy('nom')
-        ->get();
-
-    return response()->json($ciutats);
+    $prefix = 'CLT-';
+    $lastClient = Client::latest('id')->first();
+    $nextNumber = $lastClient ? ($lastClient->id + 1) : 1;
+    
+    return $prefix . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 }
 
 public function update(Request $request, $id)

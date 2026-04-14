@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ClientController;
 
 
 Route::get('/anadir-cliente', function () {
@@ -85,3 +86,10 @@ Route::get('/dashboard-operador-cliente', function () {
 
     return view('DashboardOperadorCliente');
 })->name('dashboard-operador-cliente');
+
+// API Routes para clientes
+Route::prefix('api/clientes')->group(function () {
+    Route::get('/paises', [ClientController::class, 'paises']);
+    Route::get('/count', [ClientController::class, 'count']);
+    Route::post('/', [ClientController::class, 'store']);
+});
