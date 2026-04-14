@@ -14,7 +14,7 @@ const handleLogin = async () => {
     error.value = '';
 
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    const registerUrl = new URL('/api/register', window.location.origin).toString();
+    const registerUrl = new URL('/register', window.location.origin).toString();
 
     try {
         const response = await fetch(registerUrl, {

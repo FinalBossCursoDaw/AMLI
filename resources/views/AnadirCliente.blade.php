@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="app">
-        @if(optional(auth()->user())->rol_id === 1)
+        @if(optional(auth()->user())->rol_id == 1)
             <anadir-cliente-page tipo-menu="admin"></anadir-cliente-page>
         @else
             <anadir-cliente-page tipo-menu="operador"></anadir-cliente-page>

@@ -4,46 +4,51 @@
             <header-registrado title="Dashboard" />
         </div>
 
-        <NavIzquierda :items="menuItems" />
+        <NavIzquierda :items="menuLateral" />
 
         <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
             <div class="mx-auto flex max-w-5xl flex-col items-start gap-8">
-                <div class="w-fit">
+                <div class="flex flex-wrap gap-4">
                     <stats-card
                         icono="/imagenes/iconoUsuarios.png"
                         :iconoType="'image'"
                         label="Clientes"
                         api-url="/api/clientes-count"
                     />
+
+                    <stats-card
+                        v-if="esAdministrador"
+                        icono="/imagenes/iconoUsuarios.png"
+                        :iconoType="'image'"
+                        label="Usuarios"
+                        api-url="/api/usuarios-count"
+                    />
                 </div>
 
                 <div class="w-full">
                     <clientes-tabla />
+                </div>
+
+                <div v-if="esAdministrador" class="w-full">
+                    <usuarios-tabla />
                 </div>
             </div>
         </section>
     </main>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
 import NavIzquierda from '../components/Navizquierda.vue';
-import type { Component } from 'vue';
 
-interface MenuItem {
-    id: string;
-    label: string;
-    icon: string;
-    path: string;
-    iconType: 'image' | 'emoji' | 'component';
-    iconComponent?: Component;
-}
+const propiedades = defineProps({
+    tipoMenu: {
+        type: String,
+        default: 'admin',
+    },
+});
 
-const propiedades = defineProps<{
-    tipoMenu?: string;
-}>();
-
-const menuAdministrador: MenuItem[] = [
+const menuAdministrador = [
     {
         id: 'dashboard',
         label: 'Dashboard',
@@ -52,15 +57,16 @@ const menuAdministrador: MenuItem[] = [
         iconType: 'image',
     },
     {
-        id: 'clientes',
-        label: 'Clientes',
+        id: 'anadir-cliente',
+        label: 'Añadir cliente',
         icon: '/imagenes/cliente.png',
-        path: '/clientes',
+        path: '/anadir-cliente',
         iconType: 'image',
     },
+   
 ];
 
-const menuOperador: MenuItem[] = [
+const menuOperador = [
     {
         id: 'dashboard',
         label: 'Dashboard',
@@ -72,7 +78,7 @@ const menuOperador: MenuItem[] = [
         id: 'clientes',
         label: 'Clientes',
         icon: '/imagenes/cliente.png',
-        path: '/clientes',
+        path: '/dashboard-admin',
         iconType: 'image',
     },
     {
@@ -93,7 +99,8 @@ const menuOperador: MenuItem[] = [
     },
 ];
 
-const menuItems = propiedades.tipoMenu === 'operador' ? menuOperador : menuAdministrador;
+const menuLateral = propiedades.tipoMenu === 'admin' ? menuAdministrador : menuOperador;
+const esAdministrador = propiedades.tipoMenu === 'admin';
 </script>
 
 <style lang="scss" scoped>

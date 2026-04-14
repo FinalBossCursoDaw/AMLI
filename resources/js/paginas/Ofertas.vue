@@ -4,7 +4,7 @@ import NavIzquierda from '../components/Navizquierda.vue';
 
 const menuOperativo = [
     { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/anadir-cliente', iconType: 'image' },
+    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/dashboard-admin', iconType: 'image' },
     { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
     { id: 'operaciones', label: 'Operaciones', icon: '', path: '/dashboard-operador-cliente#operaciones', iconType: 'component', iconComponent: FolderIcon },
 ];
@@ -18,7 +18,7 @@ const menuOperativo = [
 
         <NavIzquierda :items="menuOperativo" />
 
-        <section class="pl-72 pr-8 pt-32 sm:pr-10">
+        <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
             <div class="mx-auto max-w-[1080px] space-y-8">
                 <filtros-ofertas />
                 <tabla-ofertas />

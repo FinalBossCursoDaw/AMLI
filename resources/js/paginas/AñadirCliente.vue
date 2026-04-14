@@ -27,10 +27,17 @@ const menuAdministrador: MenuItem[] = [
         iconType: 'image'
     },
     {
-        id: 'clientes',
-        label: 'Clientes',
+        id: 'anadir-cliente',
+        label: 'Anadir cliente',
         icon: '/imagenes/cliente.png',
-        path: '/clientes',
+        path: '/anadir-cliente',
+        iconType: 'image'
+    },
+    {
+        id: 'editar-cliente',
+        label: 'Editar cliente',
+        icon: '/imagenes/cliente.png',
+        path: '/editar-cliente',
         iconType: 'image'
     }
 ];
@@ -47,7 +54,7 @@ const menuOperador: MenuItem[] = [
         id: 'clientes',
         label: 'Clientes',
         icon: '/imagenes/cliente.png',
-        path: '/anadir-cliente',
+        path: '/dashboard-admin',
         iconType: 'image'
     },
     {
@@ -72,9 +79,15 @@ const menuLateral = propiedades.tipoMenu === 'admin' ? menuAdministrador : menuO
 </script>
 
 <template>
-    <HeaderRegistrado title="Añadir cliente" />
     <div class="min-h-screen bg-[#f3f1f3]">
+        <div class="fixed inset-x-0 top-0 z-30">
+            <HeaderRegistrado title="Anadir cliente" />
+        </div>
+
         <NavIzquierda :items="menuLateral" />
-        <FormAnadirCliente />
+
+        <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
+            <FormAnadirCliente />
+        </section>
     </div>
 </template>

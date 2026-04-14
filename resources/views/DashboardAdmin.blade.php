@@ -14,7 +14,8 @@
 </head>
 <body>
     <div id="app">
-        @if(optional(auth()->user())->rol_id === 1)
+        
+        @if(optional(auth()->user())->rol_id == 1)
             <dashboard-admin tipo-menu="admin"></dashboard-admin>
         @else
             <dashboard-admin tipo-menu="operador"></dashboard-admin>
