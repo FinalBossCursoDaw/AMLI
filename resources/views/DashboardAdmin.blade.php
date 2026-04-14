@@ -14,7 +14,11 @@
 </head>
 <body>
     <div id="app">
-        <dashboard-admin />
+        @if(optional(auth()->user())->rol_id === 1)
+            <dashboard-admin tipo-menu="admin"></dashboard-admin>
+        @else
+            <dashboard-admin tipo-menu="operador"></dashboard-admin>
+        @endif
     </div>
 </body>
 </html>

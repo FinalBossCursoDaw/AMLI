@@ -6,7 +6,7 @@
 
         <NavIzquierda :items="menuItems" />
 
-        <section class="pl-72 pr-8 pt-32 sm:pr-10">
+        <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
             <div class="mx-auto flex max-w-5xl flex-col items-start gap-8">
                 <div class="w-fit">
                     <stats-card
@@ -25,10 +25,25 @@
     </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
 import NavIzquierda from '../components/Navizquierda.vue';
+import type { Component } from 'vue';
 
-const menuItems = [
+interface MenuItem {
+    id: string;
+    label: string;
+    icon: string;
+    path: string;
+    iconType: 'image' | 'emoji' | 'component';
+    iconComponent?: Component;
+}
+
+const propiedades = defineProps<{
+    tipoMenu?: string;
+}>();
+
+const menuAdministrador: MenuItem[] = [
     {
         id: 'dashboard',
         label: 'Dashboard',
@@ -44,6 +59,41 @@ const menuItems = [
         iconType: 'image',
     },
 ];
+
+const menuOperador: MenuItem[] = [
+    {
+        id: 'dashboard',
+        label: 'Dashboard',
+        icon: '/imagenes/casita.png',
+        path: '/dashboard-operador-cliente',
+        iconType: 'image',
+    },
+    {
+        id: 'clientes',
+        label: 'Clientes',
+        icon: '/imagenes/cliente.png',
+        path: '/clientes',
+        iconType: 'image',
+    },
+    {
+        id: 'ofertas',
+        label: 'Ofertas',
+        icon: '',
+        path: '/ofertas',
+        iconType: 'component',
+        iconComponent: ClipboardDocumentListIcon,
+    },
+    {
+        id: 'operaciones',
+        label: 'Operaciones',
+        icon: '',
+        path: '/dashboard-operador-cliente#operaciones',
+        iconType: 'component',
+        iconComponent: FolderIcon,
+    },
+];
+
+const menuItems = propiedades.tipoMenu === 'operador' ? menuOperador : menuAdministrador;
 </script>
 
 <style lang="scss" scoped>
