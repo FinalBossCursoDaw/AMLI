@@ -56,7 +56,7 @@ const obtenerClaseEstado = (estado) => {
                         <td class="px-3 py-4">{{ oferta.contenedor }}</td>
                         <td class="px-3 py-4 text-right">
                             <a
-                                href="#"
+                                :href="`/detalle-oferta?id=${oferta.id}`"
                                 class="inline-flex rounded-md bg-[#f3eff0] px-3 py-2 text-[12px] text-[#4f4a4b] transition hover:bg-[#e8e1e3]"
                             >
                                 Ver

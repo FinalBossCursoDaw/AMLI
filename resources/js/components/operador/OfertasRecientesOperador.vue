@@ -1,9 +1,9 @@
 <script setup>
 const ofertas = [
-    { id: 'ITU0041', tipo: 'FOB', origen: 'Barcelona - Marruecos', destino: 'Barcelona', estado: 'Espera', fecha: '16/11/2025' },
-    { id: 'ITU0047', tipo: 'CIF', origen: 'Barcelona - Bali', destino: 'Bali', estado: 'Aceptada', fecha: '11/11/2025' },
-    { id: 'ITU0142', tipo: 'EX WORKS', origen: 'Barcelona - Islandia', destino: 'Islandia', estado: 'Rechazada', fecha: '07/11/2025' },
-    { id: 'ITU0021', tipo: 'CIF', origen: 'Barcelona - Santorini', destino: 'Santorini', estado: 'Borrador', fecha: '11/11/2025' },
+    { id: 'OF-2026-001', tipo: 'FOB', origen: 'Barcelona - Marruecos', destino: 'Barcelona', estado: 'Espera', fecha: '16/11/2025' },
+    { id: 'OF-2026-002', tipo: 'CIF', origen: 'Barcelona - Bali', destino: 'Bali', estado: 'Aceptada', fecha: '11/11/2025' },
+    { id: 'OF-2026-003', tipo: 'EX WORKS', origen: 'Barcelona - Islandia', destino: 'Islandia', estado: 'Rechazada', fecha: '07/11/2025' },
+    { id: 'OF-2026-004', tipo: 'CIF', origen: 'Barcelona - Santorini', destino: 'Santorini', estado: 'Borrador', fecha: '11/11/2025' },
 ];
 
 const obtenerClaseEstado = (estado) => {
@@ -54,7 +54,7 @@ const obtenerClaseEstado = (estado) => {
                         </td>
                         <td class="px-3 py-2">{{ oferta.fecha }}</td>
                         <td class="px-3 py-2 text-right">
-                            <a href="#" class="rounded bg-[#efebec] px-3 py-1 text-[10px] text-[#686364]">Ver</a>
+                            <a :href="`/detalle-oferta?id=${oferta.id}`" class="rounded bg-[#efebec] px-3 py-1 text-[10px] text-[#686364]">Ver</a>
                         </td>
                     </tr>
                 </tbody>

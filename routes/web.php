@@ -38,6 +38,18 @@ Route::get('/ofertas', function () {
     return view('Ofertas');
 })->name('ofertas');
 
+Route::get('/detalle-oferta', function () {
+    if (!Auth::check()) {
+        return redirect('/register');
+    }
+
+    if (Auth::user()->rol_id == 1) {
+        return redirect('/dashboard-admin');
+    }
+
+    return view('DetalleOferta');
+})->name('detalle-oferta');
+
 Route::get('/operaciones', function () {
     if (!Auth::check()) {
         return redirect('/register');
