@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ClientController;
 
+Route::redirect('/', '/register');
 
 Route::get('/anadir-cliente', function () {
     if (!Auth::check()) {
@@ -70,6 +71,7 @@ Route::get('/contacto', function () {
 
 Route::view('/register', 'Register')->name('login');
 Route::post('/register', [LoginController::class, 'login'])->name('login.post');
+Route::post('/api/register', [LoginController::class, 'login']);
 
 Route::get('/quienes-somos', function () {
     return view('quienes-somos');
