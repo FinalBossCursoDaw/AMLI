@@ -69,7 +69,7 @@ const menuOperador: MenuItem[] = [
         id: 'operaciones',
         label: 'Operaciones',
         icon: '',
-        path: '/dashboard-operador-cliente#operaciones',
+        path: '/operaciones',
         iconType: 'component',
         iconComponent: FolderIcon
     }
