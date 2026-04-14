@@ -27,10 +27,17 @@ const menuAdministrador: MenuItem[] = [
         iconType: 'image'
     },
     {
-        id: 'clientes',
-        label: 'Clientes',
+        id: 'anadir-cliente',
+        label: 'Añadir cliente',
         icon: '/imagenes/cliente.png',
-        path: '/clientes',
+        path: '/anadir-cliente',
+        iconType: 'image'
+    },
+    {
+        id: 'editar-cliente',
+        label: 'Editar cliente',
+        icon: '/imagenes/cliente.png',
+        path: '/editar-cliente',
         iconType: 'image'
     }
 ];
@@ -47,7 +54,7 @@ const menuOperador: MenuItem[] = [
         id: 'clientes',
         label: 'Clientes',
         icon: '/imagenes/cliente.png',
-        path: '/anadir-cliente',
+        path: '/dashboard-admin',
         iconType: 'image'
     },
     {
