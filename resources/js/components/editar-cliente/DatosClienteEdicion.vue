@@ -31,6 +31,8 @@ const emit = defineEmits([
     'cambiar-contacto',
     'cambiar-email',
     'cambiar-telefono',
+    'cancelar',
+    'guardar-cambios',
 ]);
 
 const alCambiarPais = (event: Event) => {
@@ -199,6 +201,26 @@ const alCambiarTelefono = (event: Event) => {
                             @input="alCambiarTelefono"
                         />
                     </div>
+                </div>
+            </div>
+
+            <div class="border-t border-[#ebe6e8] pt-5">
+                <div class="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        class="rounded-[4px] border border-[#d8d2d4] bg-white px-5 py-2 font-montserrat text-[11px] font-semibold text-[#5b5758] transition hover:bg-[#f5f3f4]"
+                        @click="emit('cancelar')"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="rounded-[4px] bg-[#5b8a61] px-5 py-2 font-montserrat text-[11px] font-semibold text-white shadow-sm transition hover:bg-[#507b56]"
+                        @click="emit('guardar-cambios')"
+                    >
+                        Guardar cambios
+                    </button>
                 </div>
             </div>
         </div>

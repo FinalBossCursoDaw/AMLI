@@ -72,8 +72,8 @@
                             </td>
 
                             <td class="px-6 py-4 text-right">
-                                <a href="/editar-cliente" class="mr-2 text-gray-600 hover:text-gray-900">Editar</a>
-                                <a href="/editar-cliente" class="text-gray-600 hover:text-gray-900">></a>
+                                <a :href="`/editar-cliente?tipo=usuario&id=${usuario.id}`" class="mr-2 text-gray-600 hover:text-gray-900">Editar</a>
+                                <a :href="`/editar-cliente?tipo=usuario&id=${usuario.id}`" class="text-gray-600 hover:text-gray-900">></a>
                             </td>
                         </tr>
                     </tbody>
