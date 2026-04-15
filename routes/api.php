@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UsuariController;
+use App\Http\Controllers\OfertaController;
+
 
 Route::middleware('api')->group(function () {
     Route::get('/clientes-count', [ClientController::class, 'count']);
@@ -21,5 +23,11 @@ Route::middleware('api')->group(function () {
 
      Route::get('/usuarios-count', [UsuariController::class, 'count']);
     Route::get('/usuarios', [UsuariController::class, 'index']);
-});
 
+    //*Ofertas*//
+    Route::get('/ofertas/formulario', [OfertaController::class, 'formulario']);
+    Route::get('/ofertas/recientes', [OfertaController::class, 'recientes']);
+
+    Route::post('/ofertas', [OfertaController::class, 'store']);
+
+});
