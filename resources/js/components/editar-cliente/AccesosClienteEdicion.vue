@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 interface DatosAcceso {
     usuario: string;
@@ -13,17 +13,38 @@ const props = defineProps<{
     rolesDisponibles: string[];
 }>();
 
-const emit = defineEmits(['guardar-cambios']);
-
+const emit = defineEmits(['guardar-cambios', 'cancelar']);
 
 const formularioAcceso = reactive({
-    ...props.datosIniciales,
+    usuario: '',
+    contrasena: '',
+    rol: '',
 });
 
-const usuarioActivo = ref(props.datosIniciales.usuarioActivo);
+const usuarioActivo = ref(false);
+
+watch(
+    () => props.datosIniciales,
+    (nuevosDatos) => {
+        formularioAcceso.usuario = nuevosDatos.usuario;
+        formularioAcceso.contrasena = nuevosDatos.contrasena;
+        formularioAcceso.rol = nuevosDatos.rol;
+        usuarioActivo.value = nuevosDatos.usuarioActivo;
+    },
+    { immediate: true, deep: true }
+);
 
 const cambiarEstadoUsuario = () => {
     usuarioActivo.value = !usuarioActivo.value;
+};
+
+const guardarCambios = () => {
+    emit('guardar-cambios', {
+        usuario: formularioAcceso.usuario,
+        contrasena: formularioAcceso.contrasena,
+        rol: formularioAcceso.rol,
+        usuarioActivo: usuarioActivo.value,
+    });
 };
 </script>
 
@@ -106,6 +127,7 @@ const cambiarEstadoUsuario = () => {
                     <button
                         type="button"
                         class="rounded-[4px] border border-[#d8d2d4] bg-white px-5 py-2 font-montserrat text-[11px] font-semibold text-[#5b5758] transition hover:bg-[#f5f3f4]"
+                        @click="emit('cancelar')"
                     >
                         Cancelar
                     </button>
@@ -113,7 +135,7 @@ const cambiarEstadoUsuario = () => {
                     <button
                         type="button"
                         class="rounded-[4px] bg-[#5b8a61] px-5 py-2 font-montserrat text-[11px] font-semibold text-white shadow-sm transition hover:bg-[#507b56]"
-                        @click="emit('guardar-cambios')"
+                        @click="guardarCambios"
                     >
                         Guardar cambios
                     </button>

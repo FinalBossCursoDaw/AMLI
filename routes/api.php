@@ -13,7 +13,13 @@ Route::middleware('api')->group(function () {
     Route::put('/clientes/{id}', [ClientController::class, 'update']);
     Route::post('/clientes', [ClientController::class, 'store']);
 
-    Route::get('/usuarios-count', [UsuariController::class, 'count']);
+    //*Editar usuario*//
+    Route::get('/usuarios/{id}', [UsuariController::class, 'show']);
+    Route::put('/usuarios/{id}', [UsuariController::class, 'update']);
+ 
+
+
+     Route::get('/usuarios-count', [UsuariController::class, 'count']);
     Route::get('/usuarios', [UsuariController::class, 'index']);
 });
 

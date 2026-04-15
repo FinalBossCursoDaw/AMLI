@@ -6,7 +6,7 @@
 
         <NavIzquierda :items="menuLateral" />
 
-        <section class="pl-72 pr-8 pt-32 sm:pr-10">
+        <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
             <div class="mx-auto flex max-w-5xl flex-col items-start gap-8">
                 <div class="flex flex-wrap gap-4">
                     <stats-card
@@ -93,7 +93,7 @@ const menuOperador = [
         id: 'operaciones',
         label: 'Operaciones',
         icon: '',
-        path: '/dashboard-operador-cliente#operaciones',
+        path: '/operaciones',
         iconType: 'component',
         iconComponent: FolderIcon,
     },
