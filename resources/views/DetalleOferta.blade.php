@@ -12,7 +12,10 @@
 </head>
 <body>
     <div id="app">
-        <detalle-oferta-page oferta-id="{{ $id }}"></detalle-oferta-page>
+        <detalle-oferta-page
+            oferta-id="{{ $id }}"
+            :rol-id="{{ auth()->user()->rol_id }}"
+        ></detalle-oferta-page>
     </div>
 </body>
 </html>

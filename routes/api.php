@@ -28,6 +28,9 @@ Route::middleware('api')->group(function () {
     Route::get('/ofertas/formulario', [OfertaController::class, 'formulario'])->middleware('web');
 Route::get('/ofertas/recientes', [OfertaController::class, 'recientes'])->middleware('web');
 Route::post('/ofertas', [OfertaController::class, 'store'])->middleware('web');
+Route::get('/ofertas/{id}', [OfertaController::class, 'show'])->middleware('web');
+Route::patch('/ofertas/{id}/aceptar', [OfertaController::class, 'aceptarOferta'])->middleware('web');
+Route::patch('/ofertas/{id}/rechazar', [OfertaController::class, 'rechazarOferta'])->middleware('web');
 
 
 });

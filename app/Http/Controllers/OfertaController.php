@@ -155,6 +155,351 @@ $agentsComercials = DB::table('usuaris')
 
     return response()->json($ofertas);
 }
+public function show(string $id)
+{
+    if (!auth()->check()) {
+        return response()->json([
+            'message' => 'Usuario no autenticado',
+        ], 401);
+    }
+
+    $usuario = auth()->user();
+
+    $query = Oferta::query();
+
+    if (is_numeric($id)) {
+        $query->where('id', $id);
+    } else {
+        $query->where('codi_oferta', $id);
+    }
+
+    if ($usuario->rol_id == 2) {
+        $query->where('operador_id', $usuario->id);
+    } elseif ($usuario->rol_id != 1) {
+        $query->where('agent_comercial_id', $usuario->id);
+    }
+
+    $oferta = $query->first();
+
+    if (!$oferta) {
+        return response()->json([
+            'message' => 'Oferta no encontrada',
+        ], 404);
+    }
+
+
+      return response()->json([
+    'id' => $oferta->id,
+    'codi_oferta' => $oferta->codi_oferta,
+    'cliente' => $this->obtenerCliente($oferta->client_id),
+    'agent_comercial_id' => $oferta->agent_comercial_id,
+    'tipus_transport_id' => $oferta->tipus_transport_id,
+    'tipus_fluxe_id' => $oferta->tipus_fluxe_id,
+    'tipus_carrega_id' => $oferta->tipus_carrega_id,
+    'incoterm' => $this->obtenerIncoterm($oferta->incoterm_id),
+    'estat_oferta_id' => $oferta->estat_oferta_id,
+    'origen' => $this->obtenerOrigen($oferta),
+    'destino' => $this->obtenerDestino($oferta),
+    'shipping_line' => $this->obtenerShippingLine($oferta->linia_transport_maritim_id),
+    'tipo_contenedor' => $this->obtenerTipoContenedor($oferta->tipus_contenidor_id),
+    'mida_contenidor' => $oferta->mida_contenidor,
+    'pes_brut' => $oferta->pes_brut,
+    'volum' => $oferta->volum,
+    'descripcio_producte' => $oferta->descripcio_producte,
+    'comentaris' => $oferta->comentaris,
+    'data_creacio' => $oferta->data_creacio,
+    'data_enviament' => $oferta->data_enviament,
+    'data_validessa_inicial' => $oferta->data_validessa_inicial,
+    'data_validessa_fina' => $oferta->data_validessa_fina,
+]);
+
+}
+private function obtenerCliente(?int $clientId): string
+{
+    if (!$clientId) {
+        return '-';
+    }
+
+    $cliente = DB::table('clients')
+        ->where('id', $clientId)
+        ->value('nom_empresa');
+
+    if ($cliente) {
+        return $cliente;
+    }
+
+    return '-';
+}
+
+private function obtenerIncoterm(?int $incotermId): string
+{
+    if (!$incotermId) {
+        return '-';
+    }
+
+    $tipusIncotermId = DB::table('incoterms')
+        ->where('id', $incotermId)
+        ->value('tipus_incoterm_id');
+
+    if (!$tipusIncotermId) {
+        return '-';
+    }
+
+    $incoterm = DB::table('tipus_incoterms')
+        ->where('id', $tipusIncotermId)
+        ->value('codi');
+
+    if ($incoterm) {
+        return $incoterm;
+    }
+
+    return '-';
+}
+
+private function obtenerOrigen(Oferta $oferta): string
+{
+    if ($oferta->port_origen_id) {
+        $puerto = DB::table('ports')
+            ->where('id', $oferta->port_origen_id)
+            ->value('nom');
+
+        if ($puerto) {
+            return $puerto;
+        }
+
+        return '-';
+    }
+
+    if ($oferta->aeroport_origen_id) {
+        $aeropuerto = DB::table('aeroports')
+            ->where('id', $oferta->aeroport_origen_id)
+            ->value('nom');
+
+        if ($aeropuerto) {
+            return $aeropuerto;
+        }
+
+        return '-';
+    }
+
+    return '-';
+}
+
+private function obtenerDestino(Oferta $oferta): string
+{
+    if ($oferta->port_desti_id) {
+        $puerto = DB::table('ports')
+            ->where('id', $oferta->port_desti_id)
+            ->value('nom');
+
+        if ($puerto) {
+            return $puerto;
+        }
+
+        return '-';
+    }
+
+    if ($oferta->aeroport_desti_id) {
+        $aeropuerto = DB::table('aeroports')
+            ->where('id', $oferta->aeroport_desti_id)
+            ->value('nom');
+
+        if ($aeropuerto) {
+            return $aeropuerto;
+        }
+
+        return '-';
+    }
+
+    return '-';
+}
+
+private function obtenerShippingLine(?int $shippingLineId): string
+{
+    if (!$shippingLineId) {
+        return '-';
+    }
+
+    $shippingLine = DB::table('linies_transport_maritim')
+        ->where('id', $shippingLineId)
+        ->value('nom');
+
+    if ($shippingLine) {
+        return $shippingLine;
+    }
+
+    return '-';
+}
+
+private function obtenerTipoContenedor(?int $tipoContenedorId): string
+{
+    if (!$tipoContenedorId) {
+        return '-';
+    }
+
+    $tipoContenedor = DB::table('tipus_contenidors')
+        ->where('id', $tipoContenedorId)
+        ->value('tipus');
+
+    if ($tipoContenedor) {
+        return $tipoContenedor;
+    }
+
+    return '-';
+}
+
+
+public function updateEstado(Request $request, string $id)
+{
+    if (!auth()->check()) {
+        return response()->json([
+            'message' => 'Usuario no autenticado',
+        ], 401);
+    }
+
+    $usuario = auth()->user();
+
+    if ((int) $usuario->rol_id !== 3) {
+        return response()->json([
+            'message' => 'Solo el agente comercial puede aceptar o rechazar ofertas',
+        ], 403);
+    }
+
+    $validated = $request->validate([
+        'estat_oferta_id' => 'required|integer|in:3,4',
+    ]);
+
+    $query = Oferta::query();
+
+    if (is_numeric($id)) {
+        $query->where('id', $id);
+    } else {
+        $query->where('codi_oferta', $id);
+    }
+
+    $query->where('agent_comercial_id', $usuario->id);
+
+    $oferta = $query->first();
+
+    if (!$oferta) {
+        return response()->json([
+            'message' => 'Oferta no encontrada o no pertenece a este agente comercial',
+        ], 404);
+    }
+
+    $oferta->estat_oferta_id = $validated['estat_oferta_id'];
+    $oferta->save();
+
+    return response()->json([
+        'message' => 'Estado actualizado correctamente',
+        'id' => $oferta->id,
+        'codi_oferta' => $oferta->codi_oferta,
+        'estat_oferta_id' => $oferta->estat_oferta_id,
+    ]);
+}
+
+public function aceptarOferta(string $id)
+{
+    if (!auth()->check()) {
+        return response()->json([
+            'message' => 'Usuario no autenticado',
+        ], 401);
+    }
+
+    $usuario = auth()->user();
+
+    if ((int) $usuario->rol_id !== 3) {
+        return response()->json([
+            'message' => 'Solo el agente comercial puede aceptar ofertas',
+        ], 403);
+    }
+
+    $query = Oferta::query();
+
+    if (is_numeric($id)) {
+        $query->where('id', $id);
+    } else {
+        $query->where('codi_oferta', $id);
+    }
+
+    $query->where('agent_comercial_id', $usuario->id);
+
+    $oferta = $query->first();
+
+    if (!$oferta) {
+        return response()->json([
+            'message' => 'Oferta no encontrada o no pertenece a este agente comercial',
+        ], 404);
+    }
+
+    if ((int) $oferta->estat_oferta_id !== 2) {
+        return response()->json([
+            'message' => 'Solo se pueden aceptar ofertas en estado Espera',
+        ], 422);
+    }
+
+    $oferta->estat_oferta_id = 3;
+    $oferta->save();
+
+    return response()->json([
+        'message' => 'Oferta aceptada correctamente',
+        'id' => $oferta->id,
+        'codi_oferta' => $oferta->codi_oferta,
+        'estat_oferta_id' => $oferta->estat_oferta_id,
+    ]);
+}
+
+
+public function rechazarOferta(string $id)
+{
+    if (!auth()->check()) {
+        return response()->json([
+            'message' => 'Usuario no autenticado',
+        ], 401);
+    }
+
+    $usuario = auth()->user();
+
+    if ((int) $usuario->rol_id !== 3) {
+        return response()->json([
+            'message' => 'Solo el agente comercial puede rechazar ofertas',
+        ], 403);
+    }
+
+    $query = Oferta::query();
+
+    if (is_numeric($id)) {
+        $query->where('id', $id);
+    } else {
+        $query->where('codi_oferta', $id);
+    }
+
+    $query->where('agent_comercial_id', $usuario->id);
+
+    $oferta = $query->first();
+
+    if (!$oferta) {
+        return response()->json([
+            'message' => 'Oferta no encontrada o no pertenece a este agente comercial',
+        ], 404);
+    }
+
+    if ((int) $oferta->estat_oferta_id !== 2) {
+        return response()->json([
+            'message' => 'Solo se pueden rechazar ofertas en estado Espera',
+        ], 422);
+    }
+
+    $oferta->estat_oferta_id = 4;
+    $oferta->save();
+
+    return response()->json([
+        'message' => 'Oferta rechazada correctamente',
+        'id' => $oferta->id,
+        'codi_oferta' => $oferta->codi_oferta,
+        'estat_oferta_id' => $oferta->estat_oferta_id,
+    ]);
+}
 
 
 

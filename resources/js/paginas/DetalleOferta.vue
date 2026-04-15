@@ -1,13 +1,18 @@
 <script setup>
 import { ChevronRightIcon, ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import axios from 'axios';
 import HeaderRegistrado from '../components/Header-registrado.vue';
 import NavIzquierda from '../components/Navizquierda.vue';
 
 const props = defineProps({
     ofertaId: {
         type: String,
-        default: 'OF-2026-001',
+        default: '',
+    },
+    rolId: {
+        type: Number,
+        default: 0,
     },
 });
 
@@ -18,98 +23,51 @@ const menuOperativo = [
     { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
 ];
 
-const ofertas = {
-    'OF-2026-001': {
-        id: 'OF-2026-001',
-        estado: 'Espera',
-        validez: '20/05/2026',
-        cliente: 'Politecnica',
-        tipo: 'Importacion',
-        incoterm: 'FOB',
-        transporte: 'Maritimo',
-        origen: 'Puerto Llano',
-        destino: 'Puerto Rico',
-        shippingLine: 'MSC',
-        peso: '2.200 Kg',
-        cbm: '28 CBM',
-        modalidad: 'FCL',
-        contenedor: 'Refrigerado',
-        tamano: "20'",
-        descripcion: 'Carga general correctamente embalada y apta para transporte maritimo. Distribuida en volumen y peso especificados.',
-    },
-    'OF-2026-002': {
-        id: 'OF-2026-002',
-        estado: 'Aceptada',
-        validez: '22/05/2026',
-        cliente: 'Norte Export',
-        tipo: 'Exportacion',
-        incoterm: 'FOB',
-        transporte: 'Terrestre',
-        origen: 'Madrid',
-        destino: 'Barcelona',
-        shippingLine: 'Dachser',
-        peso: '1.450 Kg',
-        cbm: '14 CBM',
-        modalidad: 'LTL',
-        contenedor: 'Seco',
-        tamano: "40'",
-        descripcion: 'Expedicion con recogida programada y entrega prioritaria para distribucion nacional.',
-    },
-    'OF-2026-003': {
-        id: 'OF-2026-003',
-        estado: 'Rechazada',
-        validez: '25/05/2026',
-        cliente: 'Pacific Trade',
-        tipo: 'Exportacion',
-        incoterm: 'FOB',
-        transporte: 'Aereo',
-        origen: 'Melbourne',
-        destino: 'Algeciras',
-        shippingLine: 'Qatar Cargo',
-        peso: '860 Kg',
-        cbm: '9 CBM',
-        modalidad: 'ULD',
-        contenedor: 'Temperatura controlada',
-        tamano: 'Aereo',
-        descripcion: 'Mercancia sensible con ventana corta de entrega y requisitos reforzados de trazabilidad.',
-    },
-    'OF-2026-004': {
-        id: 'OF-2026-004',
-        estado: 'Borrador',
-        validez: '30/05/2026',
-        cliente: 'Euro Container',
-        tipo: 'Importacion',
-        incoterm: 'FOB',
-        transporte: 'Maritimo',
-        origen: 'Rotterdam',
-        destino: 'Bilbao',
-        shippingLine: 'Maersk',
-        peso: '3.100 Kg',
-        cbm: '33 CBM',
-        modalidad: 'FCL',
-        contenedor: 'Refrigerado',
-        tamano: "20'",
-        descripcion: 'Oferta en revision interna pendiente de validacion comercial y cierre de costes asociados.',
-    },
-    'OF-2026-005': {
-        id: 'OF-2026-005',
-        estado: 'Rechazada',
-        validez: '28/05/2026',
-        cliente: 'Bangkok Foods',
-        tipo: 'Importacion',
-        incoterm: 'FOB',
-        transporte: 'Maritimo',
-        origen: 'Valencia',
-        destino: 'Bangkok',
-        shippingLine: 'ONE',
-        peso: '2.980 Kg',
-        cbm: '30 CBM',
-        modalidad: 'FCL',
-        contenedor: 'Refrigerado',
-        tamano: "40'",
-        descripcion: 'Operacion internacional con cadena de frio y programacion flexible segun salida de buque.',
-    },
+const cargando = ref(true);
+const procesando = ref(false);
+const error = ref('');
+
+const estadoTexto = {
+    1: 'Borrador',
+    2: 'Espera',
+    3: 'Aceptada',
+    4: 'Rechazada',
 };
+
+const tipoFlujoTexto = {
+    1: 'Importacion',
+    2: 'Exportacion',
+};
+
+const tipoTransporteTexto = {
+    1: 'Maritimo',
+    2: 'Aereo',
+    3: 'Terrestre',
+};
+
+const tipoCargaTexto = {
+    1: 'FCL',
+    2: 'LCL',
+};
+
+const oferta = ref({
+    id: '',
+    estado: 'Espera',
+    validez: '-',
+    cliente: '-',
+    tipo: '-',
+    incoterm: '-',
+    transporte: '-',
+    origen: '-',
+    destino: '-',
+    shippingLine: '-',
+    peso: '-',
+    cbm: '-',
+    modalidad: '-',
+    contenedor: '-',
+    tamano: '-',
+    descripcion: '-',
+});
 
 const estadoClasses = {
     Espera: 'bg-[#f0bf62] text-white',
@@ -118,27 +76,93 @@ const estadoClasses = {
     Borrador: 'bg-[#f22929] text-white',
 };
 
-const oferta = computed(() => {
-    return ofertas[props.ofertaId] || {
-        id: props.ofertaId,
-        estado: 'Espera',
-        validez: 'Pendiente',
-        cliente: 'Cliente no disponible',
-        tipo: 'Sin definir',
-        incoterm: 'Sin definir',
-        transporte: 'Sin definir',
-        origen: 'Pendiente',
-        destino: 'Pendiente',
-        shippingLine: 'Pendiente',
-        peso: 'Pendiente',
-        cbm: 'Pendiente',
-        modalidad: 'Pendiente',
-        contenedor: 'Pendiente',
-        tamano: 'Pendiente',
-        descripcion: 'No se han encontrado mas datos para esta oferta todavia.',
-    };
+const puedeResponderOferta = computed(() => {
+    return props.rolId === 3 && oferta.value.estado === 'Espera';
+});
+
+const formatearFecha = (fecha) => {
+    if (!fecha) {
+        return '-';
+    }
+
+    const partes = fecha.split('-');
+
+    if (partes.length !== 3) {
+        return fecha;
+    }
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+};
+
+const cargarOferta = async () => {
+    try {
+        cargando.value = true;
+        error.value = '';
+
+        const response = await axios.get(`/api/ofertas/${props.ofertaId}`);
+        const data = response.data;
+
+        oferta.value = {
+            id: data.codi_oferta || data.id,
+            estado: estadoTexto[data.estat_oferta_id] || '-',
+            validez: formatearFecha(data.data_validessa_fina),
+            cliente: data.cliente || '-',
+            tipo: tipoFlujoTexto[data.tipus_fluxe_id] || '-',
+            incoterm: data.incoterm || '-',
+            transporte: tipoTransporteTexto[data.tipus_transport_id] || '-',
+            origen: data.origen || '-',
+            destino: data.destino || '-',
+            shippingLine: data.shipping_line || '-',
+            peso: data.pes_brut ?? '-',
+            cbm: data.volum ?? '-',
+            modalidad: tipoCargaTexto[data.tipus_carrega_id] || '-',
+            contenedor: data.tipo_contenedor || '-',
+            tamano: data.mida_contenidor ? `${data.mida_contenidor}'` : '-',
+            descripcion: data.descripcio_producte || data.comentaris || '-',
+        };
+    } catch (err) {
+        console.error(err);
+        error.value = 'No se ha podido cargar la oferta.';
+    } finally {
+        cargando.value = false;
+    }
+};
+
+const aceptarOferta = async () => {
+    try {
+        procesando.value = true;
+        error.value = '';
+
+        await axios.patch(`/api/ofertas/${props.ofertaId}/aceptar`);
+        await cargarOferta();
+    } catch (err) {
+        console.error(err);
+        error.value = err.response?.data?.message || 'No se ha podido aceptar la oferta.';
+    } finally {
+        procesando.value = false;
+    }
+};
+
+const rechazarOferta = async () => {
+    try {
+        procesando.value = true;
+        error.value = '';
+
+        await axios.patch(`/api/ofertas/${props.ofertaId}/rechazar`);
+        await cargarOferta();
+    } catch (err) {
+        console.error(err);
+        error.value = err.response?.data?.message || 'No se ha podido rechazar la oferta.';
+    } finally {
+        procesando.value = false;
+    }
+};
+
+onMounted(() => {
+    cargarOferta();
 });
 </script>
+
 
 <template>
     <main class="min-h-screen bg-[#f3f1f3]">
@@ -210,10 +234,12 @@ const oferta = computed(() => {
                                 </div>
                             </section>
 
-                            <div class="pt-2">
+                            <div v-if="puedeResponderOferta" class="pt-2">
                                 <button
                                     type="button"
-                                    class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#cf0b15] to-[#8e0a0f] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(167,15,22,0.22)] transition hover:scale-[1.01]"
+                                    @click="aceptarOferta"
+                                    :disabled="procesando || cargando"
+                                    class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#cf0b15] to-[#8e0a0f] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(167,15,22,0.22)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70"
                                 >
                                     Aceptar oferta
                                     <ChevronRightIcon class="h-4 w-4" />
@@ -296,10 +322,12 @@ const oferta = computed(() => {
                                 </button>
                             </section>
 
-                            <div class="pt-2">
+                            <div v-if="puedeResponderOferta" class="pt-2">
                                 <button
                                     type="button"
-                                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#cf0b15] to-[#8e0a0f] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(167,15,22,0.22)] transition hover:scale-[1.01]"
+                                    @click="rechazarOferta"
+                                    :disabled="procesando || cargando"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#cf0b15] to-[#8e0a0f] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(167,15,22,0.22)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70"
                                 >
                                     Rechazar oferta
                                     <ChevronRightIcon class="h-4 w-4" />
