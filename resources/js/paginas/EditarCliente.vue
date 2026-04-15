@@ -22,6 +22,13 @@ interface Pais {
     nom: string;
 }
 
+interface DatosAcceso {
+    usuario: string;
+    contrasena: string;
+    rol: string;
+    usuarioActivo: boolean;
+}
+
 const propiedades = defineProps<{
     tipoMenu?: string;
 }>();
@@ -77,7 +84,7 @@ const menuOperador: MenuItem[] = [
         id: 'operaciones',
         label: 'Operaciones',
         icon: '',
-        path: '/dashboard-operador-cliente#operaciones',
+        path: '/operaciones',
         iconType: 'component',
         iconComponent: FolderIcon,
     },
@@ -87,9 +94,11 @@ const menuLateral = propiedades.tipoMenu === 'admin' ? menuAdministrador : menuO
 
 const cargandoCliente = ref(true);
 const errorCliente = ref('');
-const parametroId = new URLSearchParams(window.location.search).get('id');
+const parametros = new URLSearchParams(window.location.search);
+const tipoEdicion = parametros.get('tipo') === 'usuario' ? 'usuario' : 'cliente';
+const esEdicionUsuario = tipoEdicion === 'usuario';
+const parametroId = parametros.get('id');
 const clienteId = parametroId ? Number(parametroId) : null;
-
 
 const resumenCliente = ref({
     idCliente: '',
@@ -109,8 +118,16 @@ const datosCliente = ref({
     telefono: '',
 });
 
+const datosAcceso = ref<DatosAcceso>({
+    usuario: '',
+    contrasena: '',
+    rol: '',
+    usuarioActivo: true,
+});
+
 const paisesDisponibles = ref<Pais[]>([]);
 const ciudadesDisponibles = ref<string[]>([]);
+const rolesDisponibles = ['Administrador', 'Operador', 'Cliente'];
 
 const cambiarCiudad = (nombreCiudad: string) => {
     datosCliente.value.ciudad = nombreCiudad;
@@ -144,7 +161,7 @@ const cambiarTelefono = (nuevoTelefono: string) => {
     datosCliente.value.telefono = nuevoTelefono;
 };
 
-const guardarCambios = async () => {
+const guardarCambiosCliente = async () => {
     if (!clienteId) {
         alert('No se ha encontrado el id del cliente');
         return;
@@ -169,15 +186,55 @@ const guardarCambios = async () => {
     }
 };
 
+const obtenerRolId = (rol: string) => {
+    if (rol === 'Administrador') {
+        return 1;
+    }
 
-const datosAcceso = {
-    usuario: 'Juanperez',
-    contrasena: 'SoyJuan',
-    rol: 'Cliente',
-    usuarioActivo: true,
+    if (rol === 'Operador' || rol === 'Gestor') {
+        return 2;
+    }
+
+    if (rol === 'Cliente') {
+        return 3;
+    }
+
+    return null;
 };
 
-const rolesDisponibles = ['Cliente', 'Administrador', 'Gestor'];
+const guardarCambiosUsuario = async (datosFormulario: DatosAcceso) => {
+    const usuarioId = Number(parametros.get('id'));
+
+    if (!usuarioId) {
+        alert('No se ha encontrado el id del usuario');
+        return;
+    }
+
+    const rolId = obtenerRolId(datosFormulario.rol);
+
+    if (!rolId) {
+        alert('El rol seleccionado no es valido');
+        return;
+    }
+
+    try {
+        await axios.put(`/api/usuarios/${usuarioId}`, {
+            username: datosFormulario.usuario,
+            contrasenya: datosFormulario.contrasena,
+            rol_id: rolId,
+            actiu: datosFormulario.usuarioActivo ? 1 : 0,
+        });
+
+        alert('Usuario actualizado correctamente');
+    } catch (error) {
+        console.error(error);
+        alert('No se ha podido actualizar el usuario');
+    }
+};
+
+const cancelarEdicion = () => {
+    window.history.back();
+};
 
 const cargarPaissos = async () => {
     try {
@@ -215,7 +272,6 @@ const cambiarPais = async (nombrePais: string) => {
         ciudadesDisponibles.value = [];
     }
 };
-
 
 const cargarCliente = async () => {
     if (!clienteId) {
@@ -264,7 +320,42 @@ const cargarCliente = async () => {
     }
 };
 
+const cargarUsuario = async () => {
+    const usuarioId = Number(parametros.get('id'));
+
+    if (!usuarioId) {
+        errorCliente.value = 'No se ha encontrado el usuario';
+        cargandoCliente.value = false;
+        return;
+    }
+
+    try {
+        cargandoCliente.value = true;
+        errorCliente.value = '';
+
+        const response = await axios.get(`/api/usuarios/${usuarioId}`);
+        const usuario = response.data;
+
+        datosAcceso.value = {
+            usuario: usuario.username || '',
+            contrasena: usuario.contrasenya || '',
+            rol: usuario.rol || '',
+            usuarioActivo: Boolean(usuario.actiu),
+        };
+    } catch (error) {
+        console.error(error);
+        errorCliente.value = 'No se ha podido cargar el usuario';
+    } finally {
+        cargandoCliente.value = false;
+    }
+};
+
 onMounted(async () => {
+    if (esEdicionUsuario) {
+        await cargarUsuario();
+        return;
+    }
+
     await cargarPaissos();
     await cargarCliente();
 });
@@ -274,17 +365,17 @@ onMounted(async () => {
     <main class="min-h-screen bg-[#f3f1f3]">
         <div class="fixed inset-x-0 top-0 z-30">
             <HeaderRegistrado
-                title="Editar Cliente"
-                subtitle="Modifica la informacion del cliente y gestiona su acceso"
+                :title="esEdicionUsuario ? 'Editar Usuario' : 'Editar Cliente'"
+                :subtitle="esEdicionUsuario ? 'Gestiona los accesos y permisos del usuario' : 'Modifica la informacion del cliente'"
             />
         </div>
 
         <NavIzquierda :items="menuLateral" />
 
-        <section class="pl-72 pr-8 pt-32 sm:pr-10">
-            <div class="mx-auto max-w-5xl">
+        <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
+            <div :class="esEdicionUsuario ? 'mx-auto max-w-2xl' : 'mx-auto max-w-5xl'">
                 <p v-if="cargandoCliente" class="text-sm text-gray-600">
-                    Cargando cliente...
+                    {{ esEdicionUsuario ? 'Cargando usuario...' : 'Cargando cliente...' }}
                 </p>
 
                 <p v-else-if="errorCliente" class="text-sm text-red-600">
@@ -293,13 +384,15 @@ onMounted(async () => {
 
                 <template v-else>
                     <ResumenClienteEdicion
+                        v-if="!esEdicionUsuario"
                         :id-cliente="resumenCliente.idCliente"
                         :fecha-alta="resumenCliente.fechaAlta"
                         :estado="resumenCliente.estado"
                     />
 
-                    <div class="grid gap-6 lg:grid-cols-[1.15fr_0.95fr]">
+                    <div class="grid gap-6">
                         <DatosClienteEdicion
+                            v-if="!esEdicionUsuario"
                             :datos-iniciales="datosCliente"
                             :paises-disponibles="paisesDisponibles"
                             :ciudades-disponibles="ciudadesDisponibles"
@@ -312,12 +405,16 @@ onMounted(async () => {
                             @cambiar-contacto="cambiarContacto"
                             @cambiar-email="cambiarEmail"
                             @cambiar-telefono="cambiarTelefono"
+                            @cancelar="cancelarEdicion"
+                            @guardar-cambios="guardarCambiosCliente"
                         />
 
                         <AccesosClienteEdicion
+                            v-if="esEdicionUsuario"
                             :datos-iniciales="datosAcceso"
                             :roles-disponibles="rolesDisponibles"
-                            @guardar-cambios="guardarCambios"
+                            @cancelar="cancelarEdicion"
+                            @guardar-cambios="guardarCambiosUsuario"
                         />
                     </div>
                 </template>

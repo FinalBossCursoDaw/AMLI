@@ -4,22 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Dashboard Admin - AMLI</title>
-
+    <title>Operaciones - AMLI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
-        
-        @if(optional(auth()->user())->rol_id == 1)
-            <dashboard-admin tipo-menu="admin"></dashboard-admin>
-        @else
-            <dashboard-admin tipo-menu="operador"></dashboard-admin>
-        @endif
+        <operaciones-page></operaciones-page>
     </div>
 </body>
 </html>
