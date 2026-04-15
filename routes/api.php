@@ -25,9 +25,9 @@ Route::middleware('api')->group(function () {
     Route::get('/usuarios', [UsuariController::class, 'index']);
 
     //*Ofertas*//
-    Route::get('/ofertas/formulario', [OfertaController::class, 'formulario']);
-    Route::get('/ofertas/recientes', [OfertaController::class, 'recientes']);
+    Route::get('/ofertas/formulario', [OfertaController::class, 'formulario'])->middleware('web');
+Route::get('/ofertas/recientes', [OfertaController::class, 'recientes'])->middleware('web');
+Route::post('/ofertas', [OfertaController::class, 'store'])->middleware('web');
 
-    Route::post('/ofertas', [OfertaController::class, 'store']);
 
 });

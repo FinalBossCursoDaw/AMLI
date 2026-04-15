@@ -104,7 +104,8 @@ $agentsComercials = DB::table('usuaris')
             'aeroport_desti_id' => $validated['aeroport_desti_id'] ?? null,
             'linia_transport_maritim_id' => $validated['linia_transport_maritim_id'] ?? null,
             'estat_oferta_id' => 2,
-            'operador_id' => 1,
+            'operador_id' => auth()->id(),
+
             'data_creacio' => now()->format('Y-m-d'),
             'data_enviament' => now()->format('Y-m-d'),
             'data_validessa_inicial' => now()->format('Y-m-d'),
