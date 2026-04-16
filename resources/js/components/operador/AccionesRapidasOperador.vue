@@ -10,7 +10,7 @@ import { PlusIcon } from '@heroicons/vue/24/outline';
 
         <div class="grid gap-4 p-5 sm:grid-cols-2">
             <a
-                href="/ofertas"
+                href="/ofertas/crear"
                 class="flex items-center justify-between rounded-lg border border-[#ece7e8] bg-[#fcfbfb] px-4 py-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
             >
                 <div class="flex items-center gap-3">

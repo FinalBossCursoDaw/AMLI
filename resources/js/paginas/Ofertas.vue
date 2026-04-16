@@ -20,7 +20,6 @@ const menuOperativo = [
 
         <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
             <div class="mx-auto max-w-[1080px] space-y-8">
-                <filtros-ofertas />
                 <tabla-ofertas />
             </div>
         </section>
