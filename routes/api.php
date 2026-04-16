@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UsuariController;
 use App\Http\Controllers\OfertaController;
+use App\Http\Controllers\OperacioController;
 
 
 Route::middleware('api')->group(function () {
@@ -33,5 +34,10 @@ Route::patch('/ofertas/{id}/aceptar', [OfertaController::class, 'aceptarOferta']
 Route::patch('/ofertas/{id}/rechazar', [OfertaController::class, 'rechazarOferta'])->middleware('web');
 Route::get('/ofertas', [OfertaController::class, 'index'])->middleware('web');
 
+    //*Operaciones*//
+    Route::get('/operaciones', [OperacioController::class, 'index'])->middleware('web');
+    Route::get('/operaciones/{id}', [OperacioController::class, 'show'])->middleware('web');
+    Route::patch('/operaciones/{id}/estado', [OperacioController::class, 'updateEstado'])->middleware('web');
 
 });
+

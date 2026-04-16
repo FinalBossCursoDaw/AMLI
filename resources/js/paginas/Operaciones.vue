@@ -1,6 +1,6 @@
 <script setup>
 import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import HeaderRegistrado from '../components/Header-registrado.vue';
 import NavIzquierda from '../components/Navizquierda.vue';
 import FiltrosOperaciones from '../components/operaciones/FiltrosOperaciones.vue';
@@ -13,16 +13,9 @@ const menuOperativo = [
     { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
 ];
 
-const operaciones = [
-    { id: 'OP-2026-001', cliente: 'Importaciones Herrera', tipo: 'Import', origen: 'Valencia', destino: 'New York', incoterm: 'FOB', modo: 'Maritimo', estado: 'Carrier', actualizacion: 'Hace 5m' },
-    { id: 'OP-2026-002', cliente: 'Global Logistics', tipo: 'Export', origen: 'Madrid', destino: 'Barcelona', incoterm: 'FOB', modo: 'Terrestre', estado: 'Buyer', actualizacion: 'Hace 3h' },
-    { id: 'OP-2026-003', cliente: 'Navas Exports', tipo: 'Export', origen: 'Melbourne', destino: 'Algeciras', incoterm: 'FOB', modo: 'Aereo', estado: 'Seller', actualizacion: 'Hace 12h' },
-    { id: 'OP-2026-004', cliente: 'Industries Garza', tipo: 'Import', origen: 'Rotterdam', destino: 'Bilbao', incoterm: 'FOB', modo: 'Maritimo', estado: 'Vessel', actualizacion: 'Hace 5m' },
-    { id: 'OP-2026-005', cliente: 'Saturn Freight', tipo: 'Import', origen: 'Valencia', destino: 'Bangkok', incoterm: 'FOB', modo: 'Maritimo', estado: 'Vessel', actualizacion: 'Hace 5m' },
-    { id: 'OP-2026-006', cliente: 'Costa Forwarding', tipo: 'Export', origen: 'Sevilla', destino: 'Santos', incoterm: 'CIF', modo: 'Maritimo', estado: 'Carrier', actualizacion: 'Hace 1d' },
-    { id: 'OP-2026-007', cliente: 'Atlas Retail', tipo: 'Import', origen: 'Hamburgo', destino: 'Valencia', incoterm: 'EXW', modo: 'Terrestre', estado: 'Buyer', actualizacion: 'Hace 2d' },
-    { id: 'OP-2026-008', cliente: 'Blue Wave Cargo', tipo: 'Export', origen: 'Bilbao', destino: 'Montreal', incoterm: 'DAP', modo: 'Maritimo', estado: 'En transito', actualizacion: 'Hace 4h' },
-];
+const operaciones = ref([]);
+const cargando = ref(true);
+const error = ref(null);
 
 const filtros = ref({
     id: '',
@@ -38,11 +31,27 @@ const filtros = ref({
 const paginaActual = ref(1);
 const porPagina = 6;
 
+onMounted(async () => {
+    try {
+        cargando.value = true;
+        const response = await fetch('/api/operaciones');
+        if (!response.ok) {
+            throw new Error('Error al cargar operaciones');
+        }
+        operaciones.value = await response.json();
+    } catch (err) {
+        error.value = err.message;
+        console.error('Error cargando operaciones:', err);
+    } finally {
+        cargando.value = false;
+    }
+});
+
 const obtenerOpcionesUnicas = (campo) => {
-    return [...new Set(operaciones.map((operacion) => operacion[campo]))];
+    return [...new Set(operaciones.value.map((operacion) => operacion[campo]))];
 };
 
-const opcionesFiltros = {
+const opcionesFiltros = computed(() => ({
     ids: obtenerOpcionesUnicas('id'),
     clientes: obtenerOpcionesUnicas('cliente'),
     tipos: obtenerOpcionesUnicas('tipo'),
@@ -50,12 +59,12 @@ const opcionesFiltros = {
     incoterms: obtenerOpcionesUnicas('incoterm'),
     modos: obtenerOpcionesUnicas('modo'),
     estados: obtenerOpcionesUnicas('estado'),
-};
+}));
 
 const operacionesFiltradas = computed(() => {
     const texto = filtros.value.busqueda.trim().toLowerCase();
 
-    return operaciones.filter((operacion) => {
+    return operaciones.value.filter((operacion) => {
         const coincideBusqueda =
             !texto ||
             [
@@ -67,7 +76,7 @@ const operacionesFiltradas = computed(() => {
                 operacion.incoterm,
                 operacion.modo,
                 operacion.estado,
-            ].some((valor) => valor.toLowerCase().includes(texto));
+            ].some((valor) => valor?.toLowerCase().includes(texto));
 
         return coincideBusqueda &&
             (!filtros.value.id || operacion.id === filtros.value.id) &&
@@ -113,20 +122,30 @@ const cambiarPagina = (pagina) => {
 
         <section class="pl-72 pr-8 pt-40 sm:pr-10 lg:pt-44">
             <div class="mx-auto max-w-[1180px] space-y-8">
-                <FiltrosOperaciones
-                    :filtros="filtros"
-                    :opciones="opcionesFiltros"
-                    @update:filtros="actualizarFiltros"
-                />
+                <div v-if="error" class="rounded-lg bg-red-50 p-4 text-red-700">
+                    Error al cargar operaciones: {{ error }}
+                </div>
 
-                <TablaOperaciones
-                    :operaciones="operacionesPaginadas"
-                    :pagina-actual="paginaActual"
-                    :total-paginas="totalPaginas"
-                    :total-registros="operacionesFiltradas.length"
-                    :por-pagina="porPagina"
-                    @cambiar-pagina="cambiarPagina"
-                />
+                <div v-else-if="cargando" class="flex items-center justify-center py-12">
+                    <div class="text-gray-500">Cargando operaciones...</div>
+                </div>
+
+                <template v-else>
+                    <FiltrosOperaciones
+                        :filtros="filtros"
+                        :opciones="opcionesFiltros"
+                        @update:filtros="actualizarFiltros"
+                    />
+
+                    <TablaOperaciones
+                        :operaciones="operacionesPaginadas"
+                        :pagina-actual="paginaActual"
+                        :total-paginas="totalPaginas"
+                        :total-registros="operacionesFiltradas.length"
+                        :por-pagina="porPagina"
+                        @cambiar-pagina="cambiarPagina"
+                    />
+                </template>
             </div>
         </section>
     </main>

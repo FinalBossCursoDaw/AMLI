@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Oferta;
+use App\Services\OperacioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -493,14 +494,26 @@ public function aceptarOferta(string $id)
         ], 422);
     }
 
+    // Actualizar estado de la oferta
     $oferta->estat_oferta_id = 3;
     $oferta->save();
 
+    // Crear operación desde la oferta aceptada
+    $operacioService = new OperacioService();
+    $operacio = $operacioService->crearOperacioDesdeOferta($oferta);
+
     return response()->json([
-        'message' => 'Oferta aceptada correctamente',
-        'id' => $oferta->id,
-        'codi_oferta' => $oferta->codi_oferta,
-        'estat_oferta_id' => $oferta->estat_oferta_id,
+        'message' => 'Oferta aceptada correctamente y operación creada',
+        'oferta' => [
+            'id' => $oferta->id,
+            'codi_oferta' => $oferta->codi_oferta,
+            'estat_oferta_id' => $oferta->estat_oferta_id,
+        ],
+        'operacio' => [
+            'id' => $operacio->id,
+            'codi_operacio' => $operacio->codi_operacio,
+            'estado' => 'Creada',
+        ],
     ]);
 }
 
