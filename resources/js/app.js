@@ -16,7 +16,6 @@ import NotificacionesOperador from './components/operador/NotificacionesOperador
 import OfertasRecientesOperador from './components/operador/OfertasRecientesOperador.vue';
 import OperacionesRecientesOperador from './components/operador/OperacionesRecientesOperador.vue';
 import ResumenOperador from './components/operador/ResumenOperador.vue';
-import FiltrosOfertas from './components/ofertas/FiltrosOfertas.vue';
 import TablaOfertas from './components/ofertas/TablaOfertas.vue';
 import RegisterPage from './paginas/Register.vue';
 import Contacto from './paginas/Contacto.vue';
@@ -48,7 +47,6 @@ app.component('notificaciones-operador', NotificacionesOperador);
 app.component('ofertas-recientes-operador', OfertasRecientesOperador);
 app.component('operaciones-recientes-operador', OperacionesRecientesOperador);
 app.component('resumen-operador', ResumenOperador);
-app.component('filtros-ofertas', FiltrosOfertas);
 app.component('tabla-ofertas', TablaOfertas);
 app.component('register-page', RegisterPage);
 app.component('contacto-page', Contacto);

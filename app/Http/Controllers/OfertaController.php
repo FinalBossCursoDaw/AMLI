@@ -230,6 +230,61 @@ private function obtenerCliente(?int $clientId): string
 
     return '-';
 }
+public function index()
+{
+    if (!auth()->check()) {
+        return response()->json([
+            'message' => 'Usuario no autenticado',
+        ], 401);
+    }
+
+    $usuario = auth()->user();
+
+    $query = Oferta::orderByDesc('id');
+
+    $textoEstados = [
+        1 => 'Borrador',
+        2 => 'Espera',
+        3 => 'Aceptada',
+        4 => 'Rechazada',
+    ];
+
+    $textoModos = [
+        1 => 'Maritimo',
+        2 => 'Aereo',
+        3 => 'Terrestre',
+    ];
+
+    $textoTipos = [
+        1 => 'Importacion',
+        2 => 'Exportacion',
+    ];
+
+    if ($usuario->rol_id == 2) {
+        $query->where('operador_id', $usuario->id);
+    } elseif ($usuario->rol_id != 1) {
+        $query->where('agent_comercial_id', $usuario->id);
+    }
+
+    $ofertas = $query->get();
+
+    $resultado = $ofertas->map(function ($oferta) use ($textoEstados, $textoModos, $textoTipos) {
+        return [
+            'id' => $oferta->id,
+            'codi_oferta' => $oferta->codi_oferta,
+            'tipo' => $textoTipos[$oferta->tipus_fluxe_id] ?? '-',
+            'origen' => $this->obtenerOrigen($oferta),
+            'destino' => $this->obtenerDestino($oferta),
+            'incoterm' => $this->obtenerIncoterm($oferta->incoterm_id),
+            'modo' => $textoModos[$oferta->tipus_transport_id] ?? '-',
+            'estado' => $textoEstados[$oferta->estat_oferta_id] ?? '-',
+            'contenedor' => $this->obtenerTipoContenedor($oferta->tipus_contenidor_id),
+        ];
+    });
+
+    return response()->json($resultado);
+}
+
 
 private function obtenerIncoterm(?int $incotermId): string
 {

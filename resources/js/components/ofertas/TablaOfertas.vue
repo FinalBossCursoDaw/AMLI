@@ -1,11 +1,11 @@
 <script setup>
-const ofertas = [
-    { id: 'OF-2026-001', tipo: 'Import', origen: 'Valencia', destino: 'New York', incoterm: 'FOB', modo: 'Maritimo', estado: 'Espera', contenedor: 'Refrigerado' },
-    { id: 'OF-2026-002', tipo: 'Export', origen: 'Madrid', destino: 'Barcelona', incoterm: 'FOB', modo: 'Terrestre', estado: 'Aceptada', contenedor: 'Refrigerado' },
-    { id: 'OF-2026-003', tipo: 'Export', origen: 'Melbourne', destino: 'Algeciras', incoterm: 'FOB', modo: 'Aereo', estado: 'Rechazada', contenedor: 'Refrigerado' },
-    { id: 'OF-2026-004', tipo: 'Import', origen: 'Rotterdam', destino: 'Bilbao', incoterm: 'FOB', modo: 'Maritimo', estado: 'Borrador', contenedor: 'Refrigerado' },
-    { id: 'OF-2026-005', tipo: 'Import', origen: 'Valencia', destino: 'Bangkok', incoterm: 'FOB', modo: 'Maritimo', estado: 'Rechazada', contenedor: 'Refrigerado' },
-];
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+
+const ofertas = ref([]);
+const cargando = ref(true);
+const error = ref('');
+
 
 const obtenerClaseEstado = (estado) => {
     const clases = {
@@ -17,7 +17,29 @@ const obtenerClaseEstado = (estado) => {
 
     return clases[estado] || 'bg-[#e7e1e3] text-[#514d4e]';
 };
+
+const cargarOfertas = async () => {
+    try {
+        cargando.value = true;
+        error.value = '';
+
+        const response = await axios.get('/api/ofertas');
+        ofertas.value = response.data;
+    } catch (err) {
+        console.error('Error cargando ofertas:', err);
+        error.value = 'No se han podido cargar las ofertas.';
+        ofertas.value = [];
+    } finally {
+        cargando.value = false;
+    }
+};
+
+
+onMounted(() => {
+    cargarOfertas();
+});
 </script>
+
 
 <template>
     <section class="rounded-xl border border-[#ddd6d8] bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
@@ -37,46 +59,57 @@ const obtenerClaseEstado = (estado) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="oferta in ofertas"
-                        :key="oferta.id"
-                        class="border-t border-[#eee8ea] font-montserrat text-[12px] text-[#474344]"
-                    >
-                        <td class="px-3 py-4">{{ oferta.id }}</td>
-                        <td class="px-3 py-4">{{ oferta.tipo }}</td>
-                        <td class="px-3 py-4">{{ oferta.origen }}</td>
-                        <td class="px-3 py-4">{{ oferta.destino }}</td>
-                        <td class="px-3 py-4">{{ oferta.incoterm }}</td>
-                        <td class="px-3 py-4">{{ oferta.modo }}</td>
-                        <td class="px-3 py-4">
-                            <span :class="['inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold leading-none', obtenerClaseEstado(oferta.estado)]">
-                                {{ oferta.estado }}
-                            </span>
-                        </td>
-                        <td class="px-3 py-4">{{ oferta.contenedor }}</td>
-                        <td class="px-3 py-4 text-right">
-                            <a
-                                :href="`/ofertas/${oferta.id}`"
-                                class="inline-flex rounded-md bg-[#f3eff0] px-3 py-2 text-[12px] text-[#4f4a4b] transition hover:bg-[#e8e1e3]"
-                            >
-                                Ver
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
+    <tr v-if="cargando" class="border-t border-[#eee8ea] font-montserrat text-[12px] text-[#474344]">
+        <td colspan="9" class="px-3 py-4 text-center">
+            Cargando ofertas...
+        </td>
+    </tr>
+    <tr v-else-if="error" class="border-t border-[#eee8ea] font-montserrat text-[12px] text-[#474344]">
+        <td colspan="9" class="px-3 py-4 text-center">
+            {{ error }}
+        </td>
+    </tr>
+
+    <tr v-else-if="ofertas.length === 0" class="border-t border-[#eee8ea] font-montserrat text-[12px] text-[#474344]">
+        <td colspan="9" class="px-3 py-4 text-center">
+            No hay ofertas disponibles.
+        </td>
+    </tr>
+
+    <tr
+        v-else
+        v-for="oferta in ofertas"
+        :key="oferta.id"
+        class="border-t border-[#eee8ea] font-montserrat text-[12px] text-[#474344]"
+    >
+        <td class="px-3 py-4">{{ oferta.codi_oferta }}</td>
+        <td class="px-3 py-4">{{ oferta.tipo }}</td>
+        <td class="px-3 py-4">{{ oferta.origen }}</td>
+        <td class="px-3 py-4">{{ oferta.destino }}</td>
+        <td class="px-3 py-4">{{ oferta.incoterm }}</td>
+        <td class="px-3 py-4">{{ oferta.modo }}</td>
+        <td class="px-3 py-4">
+            <span :class="['inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold leading-none', obtenerClaseEstado(oferta.estado)]">
+                {{ oferta.estado }}
+            </span>
+        </td>
+        <td class="px-3 py-4">{{ oferta.contenedor }}</td>
+        <td class="px-3 py-4 text-right">
+            <a
+                :href="`/ofertas/${oferta.id}`"
+                class="inline-flex rounded-md bg-[#f3eff0] px-3 py-2 text-[12px] text-[#4f4a4b] transition hover:bg-[#e8e1e3]"
+            >
+                Ver
+            </a>
+        </td>
+    </tr>
+</tbody>
+
             </table>
         </div>
 
-        <div class="flex flex-col gap-3 border-t border-[#eee8ea] px-3 py-3 font-montserrat text-[11px] text-[#a39ca0] sm:flex-row sm:items-center sm:justify-between">
-            <p>Mostrando 1 - 5 de 25 ofertas</p>
-
-            <div class="flex items-center justify-end gap-1 text-[#4f4a4b]">
-                <button type="button" class="rounded px-1.5 py-0.5 hover:bg-[#f3eff0]">&lt;</button>
-                <button type="button" class="rounded border border-[#dad3d5] px-1.5 py-0.5 bg-[#f8f6f7]">1</button>
-                <button type="button" class="rounded border border-[#dad3d5] px-1.5 py-0.5 hover:bg-[#f8f6f7]">2</button>
-                <button type="button" class="rounded border border-[#dad3d5] px-1.5 py-0.5 hover:bg-[#f8f6f7]">3</button>
-                <button type="button" class="rounded px-1.5 py-0.5 hover:bg-[#f3eff0]">&gt;</button>
-            </div>
+        <div class="border-t border-[#eee8ea] px-3 py-3 font-montserrat text-[11px] text-[#a39ca0]">
+            <p>Mostrando {{ ofertas.length }} ofertas</p>
         </div>
     </section>
 </template>
