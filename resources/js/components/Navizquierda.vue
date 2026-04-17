@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const isActive = (path: string) => {
-    return window.location.pathname === path;
+    return window.location.pathname === path || window.location.pathname.startsWith(`${path}/`);
 };
 
 const isImageIcon = (item: MenuItem) => {

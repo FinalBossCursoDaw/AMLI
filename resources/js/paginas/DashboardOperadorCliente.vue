@@ -2,12 +2,31 @@
 import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
 import NavIzquierda from '../components/Navizquierda.vue';
 
+const props = defineProps({
+    rolId: {
+        type: Number,
+        required: true,
+    },
+});
+
+const puedeCrear = props.rolId === 2;
+
 const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/dashboard-admin', iconType: 'image' },
     { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
     { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
 ];
+
+if (props.rolId === 2) {
+    menuItems.splice(1, 0, {
+        id: 'clientes',
+        label: 'Clientes',
+        icon: '/imagenes/cliente.png',
+        path: '/dashboard-admin',
+        iconType: 'image',
+    });
+}
+
 </script>
 
 <template>
@@ -24,7 +43,8 @@ const menuItems = [
 
                 <div class="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
                     <div class="space-y-5">
-                        <acciones-rapidas-operador />
+                        <acciones-rapidas-operador v-if="puedeCrear" />
+
                         <ofertas-recientes-operador />
                         <operaciones-recientes-operador />
                     </div>

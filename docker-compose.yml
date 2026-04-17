@@ -3,27 +3,44 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: simex_app
-    restart: unless-stopped
-    working_dir: /var/www
+    container_name: amli-app
     volumes:
-      - ./:/var/www
-    networks:
-      - simex
-
-  nginx:
-    image: nginx:alpine
-    container_name: simex_nginx
-    restart: unless-stopped
+      - ./:/var/www/html
+    env_file:
+      - .env
+    environment:
+      APP_URL: ${DOCKER_APP_URL:-http://localhost:8000}
+      DB_CONNECTION: ${DB_CONNECTION:-sqlsrv}
+      DB_HOST: ${DOCKER_DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-1433}
+      DB_ENCRYPT: ${DB_ENCRYPT:-yes}
+      DB_TRUST_SERVER_CERTIFICATE: ${DB_TRUST_SERVER_CERTIFICATE:-true}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
-      - "8000:80"
-    volumes:
-      - ./:/var/www
-      - ./Docker/Nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - "${DOCKER_HTTP_PORT:-8000}:80"
+    restart: unless-stopped
     depends_on:
-      - app
-    networks:
-      - simex
+      vite:
+        condition: service_healthy
 
-networks:
-  simex:
+  vite:
+    image: node:22-alpine
+    container_name: amli-vite
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - vite_node_modules:/app/node_modules
+    command: sh -c "npm ci && npm run dev"
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5173/@vite/client >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 45s
+
+volumes:
+  vite_node_modules:

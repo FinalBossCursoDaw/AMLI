@@ -12,7 +12,8 @@
 </head>
 <body>
     <div id="app">
-        <dashboard-operador-cliente-page></dashboard-operador-cliente-page>
+        <dashboard-operador-cliente-page :rol-id="{{ auth()->user()->rol_id }}"></dashboard-operador-cliente-page>
+
     </div>
 </body>
 </html>

@@ -51,6 +51,30 @@ Route::get('/detalle-oferta', function () {
     return view('DetalleOferta');
 })->name('detalle-oferta');
 
+Route::get('/ofertas/crear', function () {
+    if (!Auth::check()) {
+        return redirect('/register');
+    }
+
+    if (Auth::user()->rol_id == 1) {
+        return redirect('/dashboard-admin');
+    }
+
+    return view('CrearOferta');
+})->name('ofertas.crear');
+
+Route::get('/ofertas/{id}', function (string $id) {
+    if (!Auth::check()) {
+        return redirect('/register');
+    }
+
+    if (Auth::user()->rol_id == 1) {
+        return redirect('/dashboard-admin');
+    }
+
+    return view('DetalleOferta', ['id' => $id]);
+})->where('id', '[A-Za-z0-9\-]+')->name('ofertas.detalle');
+
 Route::get('/operaciones', function () {
     if (!Auth::check()) {
         return redirect('/register');

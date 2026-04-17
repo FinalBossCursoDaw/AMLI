@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UsuariController;
+use App\Http\Controllers\OfertaController;
+use App\Http\Controllers\OperacioController;
+
 
 Route::middleware('api')->group(function () {
     Route::get('/clientes-count', [ClientController::class, 'count']);
@@ -21,5 +24,20 @@ Route::middleware('api')->group(function () {
 
      Route::get('/usuarios-count', [UsuariController::class, 'count']);
     Route::get('/usuarios', [UsuariController::class, 'index']);
+
+    //*Ofertas*//
+    Route::get('/ofertas/formulario', [OfertaController::class, 'formulario'])->middleware('web');
+Route::get('/ofertas/recientes', [OfertaController::class, 'recientes'])->middleware('web');
+Route::post('/ofertas', [OfertaController::class, 'store'])->middleware('web');
+Route::get('/ofertas/{id}', [OfertaController::class, 'show'])->middleware('web');
+Route::patch('/ofertas/{id}/aceptar', [OfertaController::class, 'aceptarOferta'])->middleware('web');
+Route::patch('/ofertas/{id}/rechazar', [OfertaController::class, 'rechazarOferta'])->middleware('web');
+Route::get('/ofertas', [OfertaController::class, 'index'])->middleware('web');
+
+    //*Operaciones*//
+    Route::get('/operaciones', [OperacioController::class, 'index'])->middleware('web');
+    Route::get('/operaciones/{id}', [OperacioController::class, 'show'])->middleware('web');
+    Route::patch('/operaciones/{id}/estado', [OperacioController::class, 'updateEstado'])->middleware('web');
+
 });
 

@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="app">
-        <operaciones-page></operaciones-page>
+        <operaciones-page :rol-id="{{ auth()->user()->rol_id }}"></operaciones-page>
     </div>
 </body>
 </html>

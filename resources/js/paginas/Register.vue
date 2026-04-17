@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from 'axios';
 import { ref } from 'vue';
 import HeaderComponent from '../components/Header.vue';
 import InputComponent from '../components/Input.vue';
@@ -17,30 +18,22 @@ const handleLogin = async () => {
     const registerUrl = new URL('/register', window.location.origin).toString();
 
     try {
-        const response = await fetch(registerUrl, {
-            method: 'POST',
+        const response = await axios.post(registerUrl, {
+            correu: correu.value,
+            contrasenya: contrasenya.value,
+        }, {
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': token || '',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({
-                correu: correu.value,
-                contrasenya: contrasenya.value,
-            }),
         });
 
-        if (response.ok) {
-            const data = await response.json().catch(() => ({}));
-            const redirectPath = data.redirect || '/dashboard-admin';
-            window.location.href = new URL(redirectPath, window.location.origin).toString();
-            return;
-        }
-
-        const data = await response.json().catch(() => ({}));
-        error.value = data.errors?.correu?.[0] || data.error || 'Credenciales incorrectas';
+        const redirectPath = response.data?.redirect || '/dashboard-admin';
+        window.location.href = new URL(redirectPath, window.location.origin).toString();
     } catch (e) {
-        error.value = 'Error de conexion';
+        error.value = axios.isAxiosError(e)
+            ? e.response?.data?.errors?.correu?.[0] || e.response?.data?.error || 'Credenciales incorrectas'
+            : 'Error de conexion';
     } finally {
         loading.value = false;
     }
