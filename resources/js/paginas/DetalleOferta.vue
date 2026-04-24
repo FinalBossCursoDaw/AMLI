@@ -16,12 +16,25 @@ const props = defineProps({
     },
 });
 
-const menuOperativo = [
-    { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/dashboard-admin', iconType: 'image' },
-    { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
-    { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
-];
+const menuOperativo = computed(() => {
+    const items = [
+        { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
+        { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
+        { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
+    ];
+
+    if (props.rolId === 2) {
+        items.splice(1, 0, {
+            id: 'clientes',
+            label: 'Clientes',
+            icon: '/imagenes/cliente.png',
+            path: '/dashboard-admin',
+            iconType: 'image',
+        });
+    }
+
+    return items;
+});
 
 const cargando = ref(true);
 const procesando = ref(false);

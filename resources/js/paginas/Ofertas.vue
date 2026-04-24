@@ -1,13 +1,34 @@
 <script setup>
 import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
+import { computed } from 'vue';
 import NavIzquierda from '../components/Navizquierda.vue';
 
-const menuOperativo = [
-    { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/dashboard-admin', iconType: 'image' },
-    { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
-    { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
-];
+const props = defineProps({
+    rolId: {
+        type: Number,
+        default: 0,
+    },
+});
+
+const menuOperativo = computed(() => {
+    const items = [
+        { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
+        { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
+        { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
+    ];
+
+    if (props.rolId === 2) {
+        items.splice(1, 0, {
+            id: 'clientes',
+            label: 'Clientes',
+            icon: '/imagenes/cliente.png',
+            path: '/dashboard-admin',
+            iconType: 'image',
+        });
+    }
+
+    return items;
+});
 </script>
 
 <template>

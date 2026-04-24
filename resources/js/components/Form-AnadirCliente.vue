@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, onMounted, watch } from 'vue';
 
 interface FormData {
@@ -59,11 +60,10 @@ watch(() => formData.value.pais_id, async (newPaisId) => {
 
 const loadPaises = async () => {
     try {
-        const response = await fetch('/api/clientes/paises');
-        const data = await response.json();
-        
-        if (Array.isArray(data)) {
-            paises.value = data;
+        const response = await axios.get('/api/clientes/paises');
+
+        if (Array.isArray(response.data)) {
+            paises.value = response.data;
         }
     } catch (error) {
         console.error('Error al cargar países:', error);

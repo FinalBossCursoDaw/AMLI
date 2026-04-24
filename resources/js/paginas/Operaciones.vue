@@ -3,30 +3,38 @@ import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline
 import { computed, ref, onMounted } from 'vue';
 import HeaderRegistrado from '../components/Header-registrado.vue';
 import NavIzquierda from '../components/Navizquierda.vue';
-import FiltrosOperaciones from '../components/operaciones/FiltrosOperaciones.vue';
 import TablaOperaciones from '../components/operaciones/TablaOperaciones.vue';
 
-const menuOperativo = [
-    { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/dashboard-admin', iconType: 'image' },
-    { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
-    { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
-];
+const props = defineProps({
+    rolId: {
+        type: Number,
+        default: 0,
+    },
+});
+
+const menuOperativo = computed(() => {
+    const items = [
+        { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
+        { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
+        { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
+    ];
+
+    if (props.rolId === 2) {
+        items.splice(1, 0, {
+            id: 'clientes',
+            label: 'Clientes',
+            icon: '/imagenes/cliente.png',
+            path: '/dashboard-admin',
+            iconType: 'image',
+        });
+    }
+
+    return items;
+});
 
 const operaciones = ref([]);
 const cargando = ref(true);
 const error = ref(null);
-
-const filtros = ref({
-    id: '',
-    cliente: '',
-    tipo: '',
-    origen: '',
-    incoterm: '',
-    modo: '',
-    estado: '',
-    busqueda: '',
-});
 
 const paginaActual = ref(1);
 const porPagina = 6;
@@ -47,61 +55,14 @@ onMounted(async () => {
     }
 });
 
-const obtenerOpcionesUnicas = (campo) => {
-    return [...new Set(operaciones.value.map((operacion) => operacion[campo]))];
-};
-
-const opcionesFiltros = computed(() => ({
-    ids: obtenerOpcionesUnicas('id'),
-    clientes: obtenerOpcionesUnicas('cliente'),
-    tipos: obtenerOpcionesUnicas('tipo'),
-    origenes: obtenerOpcionesUnicas('origen'),
-    incoterms: obtenerOpcionesUnicas('incoterm'),
-    modos: obtenerOpcionesUnicas('modo'),
-    estados: obtenerOpcionesUnicas('estado'),
-}));
-
-const operacionesFiltradas = computed(() => {
-    const texto = filtros.value.busqueda.trim().toLowerCase();
-
-    return operaciones.value.filter((operacion) => {
-        const coincideBusqueda =
-            !texto ||
-            [
-                operacion.id,
-                operacion.cliente,
-                operacion.tipo,
-                operacion.origen,
-                operacion.destino,
-                operacion.incoterm,
-                operacion.modo,
-                operacion.estado,
-            ].some((valor) => valor?.toLowerCase().includes(texto));
-
-        return coincideBusqueda &&
-            (!filtros.value.id || operacion.id === filtros.value.id) &&
-            (!filtros.value.cliente || operacion.cliente === filtros.value.cliente) &&
-            (!filtros.value.tipo || operacion.tipo === filtros.value.tipo) &&
-            (!filtros.value.origen || operacion.origen === filtros.value.origen) &&
-            (!filtros.value.incoterm || operacion.incoterm === filtros.value.incoterm) &&
-            (!filtros.value.modo || operacion.modo === filtros.value.modo) &&
-            (!filtros.value.estado || operacion.estado === filtros.value.estado);
-    });
-});
-
 const totalPaginas = computed(() => {
-    return Math.max(1, Math.ceil(operacionesFiltradas.value.length / porPagina));
+    return Math.max(1, Math.ceil(operaciones.value.length / porPagina));
 });
 
 const operacionesPaginadas = computed(() => {
     const inicio = (paginaActual.value - 1) * porPagina;
-    return operacionesFiltradas.value.slice(inicio, inicio + porPagina);
+    return operaciones.value.slice(inicio, inicio + porPagina);
 });
-
-const actualizarFiltros = (nuevosFiltros) => {
-    filtros.value = nuevosFiltros;
-    paginaActual.value = 1;
-};
 
 const cambiarPagina = (pagina) => {
     if (pagina < 1 || pagina > totalPaginas.value) {
@@ -131,17 +92,11 @@ const cambiarPagina = (pagina) => {
                 </div>
 
                 <template v-else>
-                    <FiltrosOperaciones
-                        :filtros="filtros"
-                        :opciones="opcionesFiltros"
-                        @update:filtros="actualizarFiltros"
-                    />
-
                     <TablaOperaciones
                         :operaciones="operacionesPaginadas"
                         :pagina-actual="paginaActual"
                         :total-paginas="totalPaginas"
-                        :total-registros="operacionesFiltradas.length"
+                        :total-registros="operaciones.length"
                         :por-pagina="porPagina"
                         @cambiar-pagina="cambiarPagina"
                     />

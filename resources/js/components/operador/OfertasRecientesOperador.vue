@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
 const ofertas = ref([]);
 const cargando = ref(true);
@@ -15,8 +15,6 @@ const estados = {
     3: 'Aceptada',
     4: 'Rechazada',
 };
-
-
 
 const obtenerIncoterm = (id) => {
     for (const item of incoterms.value) {
@@ -43,7 +41,6 @@ const obtenerLugar = (portId, airportId) => {
 
     return '-';
 };
-
 
 const formatearFecha = (fecha) => {
     if (!fecha) {

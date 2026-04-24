@@ -30,6 +30,8 @@ import QuienesSomos from './paginas/QuienesSomos.vue';
 import Valores from './components/Valores.vue';
 import DashboardAdministrador from './paginas/DashboardAdministrador.vue';
 
+window.__AMLI_BUILD__ = '2026-04-14T18:18Z';
+
 const app = createApp({});
 
 app.component('pestana-component', Pestana);

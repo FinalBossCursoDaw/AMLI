@@ -41,4 +41,9 @@ class Oferta extends Model
         'descripcio_producte',
         'preu_estimad',
     ];
+
+    public function operacio()
+    {
+        return $this->hasOne(Operacio::class, 'oferta_id');
+    }
 }

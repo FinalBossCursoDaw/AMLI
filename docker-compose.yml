@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: amli-app
+    volumes:
+      - ./:/var/www/html
     env_file:
       - .env
     environment:
@@ -18,3 +20,27 @@ services:
     ports:
       - "${DOCKER_HTTP_PORT:-8000}:80"
     restart: unless-stopped
+    depends_on:
+      vite:
+        condition: service_healthy
+
+  vite:
+    image: node:22-alpine
+    container_name: amli-vite
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - vite_node_modules:/app/node_modules
+    command: sh -c "npm ci && npm run dev"
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5173/@vite/client >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 45s
+
+volumes:
+  vite_node_modules:

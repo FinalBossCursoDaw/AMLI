@@ -6,12 +6,32 @@ import axios from 'axios';
 import HeaderRegistrado from '../components/Header-registrado.vue';
 import NavIzquierda from '../components/Navizquierda.vue';
 
-const menuOperativo = [
-    { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-    { id: 'clientes', label: 'Clientes', icon: '/imagenes/cliente.png', path: '/dashboard-admin', iconType: 'image' },
-    { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
-    { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
-];
+const props = defineProps({
+    rolId: {
+        type: Number,
+        default: 0,
+    },
+});
+
+const menuOperativo = computed(() => {
+    const items = [
+        { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
+        { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
+        { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
+    ];
+
+    if (props.rolId === 2) {
+        items.splice(1, 0, {
+            id: 'clientes',
+            label: 'Clientes',
+            icon: '/imagenes/cliente.png',
+            path: '/dashboard-admin',
+            iconType: 'image',
+        });
+    }
+
+    return items;
+});
 
 const pasoActual = ref(1);
 const enviada = ref(false);
@@ -144,25 +164,6 @@ const cargarOpcionesFormulario = async () => {
         contenedores.value = response.data.tipus_contenidors;
         agentesComerciales.value = response.data.agents_comercials;
 
-        if (!formulario.origen && puertos.value.length > 0) {
-            formulario.origen = puertos.value[0].id;
-        }
-
-        if (!formulario.destino && puertos.value.length > 1) {
-            formulario.destino = puertos.value[1].id;
-        } else if (!formulario.destino && puertos.value.length > 0) {
-            formulario.destino = puertos.value[0].id;
-        }
-
-        if (!formulario.origenAereo && aeropuertos.value.length > 0) {
-            formulario.origenAereo = aeropuertos.value[0].id;
-        }
-
-        if (!formulario.destinoAereo && aeropuertos.value.length > 1) {
-            formulario.destinoAereo = aeropuertos.value[1].id;
-        } else if (!formulario.destinoAereo && aeropuertos.value.length > 0) {
-            formulario.destinoAereo = aeropuertos.value[0].id;
-        }
     } catch (error) {
         console.error(error);
         errorOpciones.value = 'No se han podido cargar los datos del formulario.';

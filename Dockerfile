@@ -37,47 +37,64 @@ COPY vite.config.ts ./
 
 RUN npm run build
 
-FROM php:8.2-apache AS app
+FROM php:8.3-apache AS app
+
+ARG TARGETARCH
 
 ENV ACCEPT_EULA=Y
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        apt-transport-https \
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+        amd64) microsoft_arch="amd64" ;; \
+        arm64) microsoft_arch="arm64" ;; \
+        *) echo "Unsupported target architecture: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        git \
         gnupg \
+        libgssapi-krb5-2 \
         libicu-dev \
         libonig-dev \
         libxml2-dev \
         libzip-dev \
+        unixodbc \
         unixodbc-dev \
         unzip \
         zip \
-    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/microsoft.list \
-    && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql18 \
-    && docker-php-ext-install bcmath intl mbstring opcache zip \
+        $PHPIZE_DEPS; \
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg; \
+    echo "deb [arch=${microsoft_arch} signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" > /etc/apt/sources.list.d/microsoft.list; \
+    apt-get update; \
+    ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql18; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install bcmath intl mbstring opcache zip \
     && pecl install sqlsrv pdo_sqlsrv \
-    && docker-php-ext-enable sqlsrv pdo_sqlsrv \
-    && a2enmod rewrite \
+    && docker-php-ext-enable sqlsrv pdo_sqlsrv
+
+RUN a2enmod rewrite \
     && sed -ri "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/000-default.conf /etc/apache2/apache2.conf \
-    && rm -rf /var/lib/apt/lists/* /tmp/pear
+    && rm -rf /tmp/pear
 
 WORKDIR /var/www/html
 
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 COPY --from=frontend /app/public/build ./public/build
+COPY Docker/start-app.sh /usr/local/bin/start-app
 
 RUN cp .env.example .env \
+    && rm -f bootstrap/cache/packages.php bootstrap/cache/services.php \
     && php artisan package:discover --ansi \
     && rm .env \
     && mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod +x /usr/local/bin/start-app
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["start-app"]

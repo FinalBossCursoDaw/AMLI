@@ -78,5 +78,4 @@ class Operacio extends Model
     public function portDesti()
     {
         return $this->belongsTo(Port::class, 'port_desti_id');
-    }
-}
+    }}

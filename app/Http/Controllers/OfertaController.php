@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Oferta;
+use App\Models\Operacio;
 use App\Services\OperacioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -120,6 +121,19 @@ $agentsComercials = DB::table('usuaris')
             'message' => 'Oferta creada correctamente',
             'oferta' => $oferta,
         ], 201);
+    }
+
+    private function crearOperacioSiFalta(Oferta $oferta): Operacio
+    {
+        $operacioExistente = Operacio::where('oferta_id', $oferta->id)->first();
+
+        if ($operacioExistente) {
+            return $operacioExistente;
+        }
+
+        $operacioService = new OperacioService();
+
+        return $operacioService->crearOperacioDesdeOferta($oferta);
     }
 
     private function generarCodigoOferta(): string
@@ -446,11 +460,21 @@ public function updateEstado(Request $request, string $id)
     $oferta->estat_oferta_id = $validated['estat_oferta_id'];
     $oferta->save();
 
+    $operacio = null;
+
+    if ((int) $oferta->estat_oferta_id === 3) {
+        $operacio = $this->crearOperacioSiFalta($oferta);
+    }
+
     return response()->json([
         'message' => 'Estado actualizado correctamente',
         'id' => $oferta->id,
         'codi_oferta' => $oferta->codi_oferta,
         'estat_oferta_id' => $oferta->estat_oferta_id,
+        'operacio' => $operacio ? [
+            'id' => $operacio->id,
+            'codi_operacio' => $operacio->codi_operacio,
+        ] : null,
     ]);
 }
 
@@ -488,19 +512,21 @@ public function aceptarOferta(string $id)
         ], 404);
     }
 
-    if ((int) $oferta->estat_oferta_id !== 2) {
+    if (!in_array((int) $oferta->estat_oferta_id, [2, 3], true)) {
         return response()->json([
-            'message' => 'Solo se pueden aceptar ofertas en estado Espera',
+            'message' => 'Solo se pueden aceptar ofertas en estado Espera o ya aceptadas sin operacion',
         ], 422);
     }
 
     // Actualizar estado de la oferta
-    $oferta->estat_oferta_id = 3;
-    $oferta->save();
+
+    if ((int) $oferta->estat_oferta_id === 2) {
+        $oferta->estat_oferta_id = 3;
+        $oferta->save();
+    }
 
     // Crear operación desde la oferta aceptada
-    $operacioService = new OperacioService();
-    $operacio = $operacioService->crearOperacioDesdeOferta($oferta);
+    $operacio = $this->crearOperacioSiFalta($oferta);
 
     return response()->json([
         'message' => 'Oferta aceptada correctamente y operación creada',

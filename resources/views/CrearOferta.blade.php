@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="app">
-        <crear-oferta-page></crear-oferta-page>
+        <crear-oferta-page :rol-id="{{ auth()->user()->rol_id }}"></crear-oferta-page>
     </div>
 </body>
 </html>
