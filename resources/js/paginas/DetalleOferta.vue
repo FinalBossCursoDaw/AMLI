@@ -178,7 +178,7 @@ onMounted(() => {
 
 
 <template>
-    <main class="min-h-screen bg-[#f3f1f3]">
+    <main class="amli-page">
         <div class="fixed inset-x-0 top-0 z-30">
             <HeaderRegistrado title="Detalle de la oferta" subtitle="Consulta la informacion de tu oferta" />
         </div>
@@ -188,7 +188,7 @@ onMounted(() => {
         <section class="pl-60 pr-4 pt-32 sm:pl-72 sm:pr-8 lg:pt-36">
             <div class="mx-auto max-w-[1080px]">
                 <div class="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
-                    <article class="rounded-xl border border-[#ddd6d8] bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
+                    <article class="amli-panel">
                         <div class="space-y-6 px-6 py-6 font-montserrat text-[#474344]">
                             <section class="space-y-4">
                                 <h2 class="text-[16px] font-semibold text-[#2f2b2c]">Informacion general</h2>
@@ -261,7 +261,7 @@ onMounted(() => {
                         </div>
                     </article>
 
-                    <article class="rounded-xl border border-[#ddd6d8] bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
+                    <article class="amli-panel">
                         <div class="space-y-5 px-6 py-6 font-montserrat text-[13px] text-[#474344]">
                             <section class="space-y-3">
                                 <div class="flex flex-wrap items-center justify-between gap-3">

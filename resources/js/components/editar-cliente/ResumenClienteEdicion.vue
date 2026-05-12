@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-    <div class="mb-5 rounded-lg border border-[#ded8da] bg-white px-5 py-4 shadow-sm">
+    <div class="amli-panel mb-5 px-5 py-4">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex flex-wrap items-center gap-4 text-[11px] text-[#8b8688]">
                 <div class="rounded border border-[#d8d2d4] bg-[#fbfafb] px-3 py-1.5 font-montserrat font-medium text-[#504c4d]">

@@ -38,52 +38,52 @@ const obtenerClaseEstado = (estado) => {
 </script>
 
 <template>
-    <section id="operaciones" class="rounded-lg border border-[#dcd6d8] bg-white shadow-sm">
-        <div class="border-b border-[#ebe6e8] px-5 py-3">
+    <section id="operaciones" class="overflow-hidden rounded-lg border border-[#d8d1d3] bg-white shadow-[0_14px_32px_rgba(48,48,48,0.08)]">
+        <div class="border-b border-[#ebe6e8] bg-[#fffdfd] px-5 py-3">
             <h2 class="font-montserrat text-[16px] font-semibold text-[#353233]">Operaciones recientes</h2>
         </div>
 
-        <div v-if="error" class="px-5 py-4 text-sm text-red-600">
+        <div v-if="error" class="px-5 py-5 text-sm text-red-600">
             Error: {{ error }}
         </div>
 
-        <div v-else-if="cargando" class="px-5 py-4 text-center text-sm text-gray-500">
+        <div v-else-if="cargando" class="px-5 py-5 text-center text-sm text-gray-500">
             Cargando operaciones...
         </div>
 
-        <div v-else-if="operaciones.length === 0" class="px-5 py-4 text-center text-sm text-gray-500">
+        <div v-else-if="operaciones.length === 0" class="px-5 py-5 text-center text-sm text-gray-500">
             No hay operaciones registradas
         </div>
 
         <div v-else class="overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-[#f8f6f7]">
-                    <tr class="font-montserrat text-[10px] uppercase tracking-[0.04em] text-[#b4adaf]">
-                        <th class="px-3 py-2 text-left font-medium">ID</th>
-                        <th class="px-3 py-2 text-left font-medium">Cliente</th>
-                        <th class="px-3 py-2 text-left font-medium">Tipo</th>
-                        <th class="px-3 py-2 text-left font-medium">Incoterm</th>
-                        <th class="px-3 py-2 text-left font-medium">Estado</th>
-                        <th class="px-3 py-2 text-right font-medium">Accion</th>
+                    <tr class="font-montserrat text-[10px] uppercase tracking-[0.06em] text-[#9f9699]">
+                        <th class="px-4 py-3 text-left font-semibold">ID</th>
+                        <th class="px-4 py-3 text-left font-semibold">Cliente</th>
+                        <th class="px-4 py-3 text-left font-semibold">Tipo</th>
+                        <th class="px-4 py-3 text-left font-semibold">Incoterm</th>
+                        <th class="px-4 py-3 text-left font-semibold">Estado</th>
+                        <th class="px-4 py-3 text-right font-semibold">Accion</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr
                         v-for="operacion in operaciones"
                         :key="operacion.id"
-                        class="border-t border-[#efe9eb] font-montserrat text-[11px] text-[#4a4647]"
+                        class="border-t border-[#efe9eb] font-montserrat text-[12px] text-[#4a4647] transition hover:bg-[#fff8f8]"
                     >
-                        <td class="px-3 py-2">{{ operacion.id }}</td>
-                        <td class="px-3 py-2">{{ operacion.cliente }}</td>
-                        <td class="px-3 py-2">{{ operacion.tipo }}</td>
-                        <td class="px-3 py-2">{{ operacion.incoterm }}</td>
-                        <td class="px-3 py-2">
+                        <td class="px-4 py-3 font-semibold text-[#353233]">{{ operacion.id }}</td>
+                        <td class="px-4 py-3">{{ operacion.cliente }}</td>
+                        <td class="px-4 py-3">{{ operacion.tipo }}</td>
+                        <td class="px-4 py-3">{{ operacion.incoterm }}</td>
+                        <td class="px-4 py-3">
                             <span :class="['inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold', obtenerClaseEstado(operacion.estado)]">
                                 {{ operacion.estado }}
                             </span>
                         </td>
-                        <td class="px-3 py-2 text-right">
-                            <a href="#" class="rounded bg-[#efebec] px-3 py-1 text-[10px] text-[#686364]">Ver</a>
+                        <td class="px-4 py-3 text-right">
+                            <a href="#" class="rounded-md border border-[#e6dedf] bg-[#f8f4f5] px-3 py-1.5 text-[10px] font-semibold text-[#686364] transition hover:border-[#c9171d] hover:bg-[#c9171d] hover:text-white">Ver</a>
                         </td>
                     </tr>
                 </tbody>

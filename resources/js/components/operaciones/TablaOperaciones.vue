@@ -59,21 +59,21 @@ const paginas = computed(() => {
 </script>
 
 <template>
-    <section class="rounded-xl border border-[#ddd6d8] bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
+    <section class="amli-panel">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[1120px]">
-                <thead class="bg-[#f8f6f7]">
-                    <tr class="font-montserrat text-[10px] uppercase tracking-[0.04em] text-[#b0a8aa]">
-                        <th class="px-3 py-3 text-left font-medium">ID</th>
-                        <th class="px-3 py-3 text-left font-medium">Cliente</th>
-                        <th class="px-3 py-3 text-left font-medium">Tipo</th>
-                        <th class="px-3 py-3 text-left font-medium">Origen</th>
-                        <th class="px-3 py-3 text-left font-medium">Destino</th>
-                        <th class="px-3 py-3 text-left font-medium">Incoterm</th>
-                        <th class="px-3 py-3 text-left font-medium">Modo</th>
-                        <th class="px-3 py-3 text-left font-medium">Estado actual</th>
-                        <th class="px-3 py-3 text-left font-medium">Ultima actualizacion</th>
-                        <th class="px-3 py-3 text-right font-medium">Accion</th>
+                <thead class="amli-table-head">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold">ID</th>
+                        <th class="px-4 py-3 text-left font-semibold">Cliente</th>
+                        <th class="px-4 py-3 text-left font-semibold">Tipo</th>
+                        <th class="px-4 py-3 text-left font-semibold">Origen</th>
+                        <th class="px-4 py-3 text-left font-semibold">Destino</th>
+                        <th class="px-4 py-3 text-left font-semibold">Incoterm</th>
+                        <th class="px-4 py-3 text-left font-semibold">Modo</th>
+                        <th class="px-4 py-3 text-left font-semibold">Estado actual</th>
+                        <th class="px-4 py-3 text-left font-semibold">Ultima actualizacion</th>
+                        <th class="px-4 py-3 text-right font-semibold">Accion</th>
                     </tr>
                 </thead>
 
@@ -81,30 +81,30 @@ const paginas = computed(() => {
                     <tr
                         v-for="operacion in operaciones"
                         :key="operacion.id"
-                        class="border-t border-[#eee8ea] font-montserrat text-[12px] text-[#474344]"
+                        class="amli-table-row"
                     >
-                        <td class="px-3 py-4">{{ operacion.id }}</td>
-                        <td class="px-3 py-4">{{ operacion.cliente }}</td>
-                        <td class="px-3 py-4">{{ operacion.tipo }}</td>
-                        <td class="px-3 py-4 whitespace-nowrap">{{ operacion.origen }}</td>
-                        <td class="px-3 py-4">
+                        <td class="px-4 py-4 font-semibold text-[#353233]">{{ operacion.id }}</td>
+                        <td class="px-4 py-4">{{ operacion.cliente }}</td>
+                        <td class="px-4 py-4">{{ operacion.tipo }}</td>
+                        <td class="whitespace-nowrap px-4 py-4">{{ operacion.origen }}</td>
+                        <td class="px-4 py-4">
                             <div class="flex items-center gap-2 whitespace-nowrap text-[#6c6769]">
                                 <ArrowLongRightIcon class="h-4 w-4 text-[#d0c8cb]" />
                                 <span>{{ operacion.destino }}</span>
                             </div>
                         </td>
-                        <td class="px-3 py-4">{{ operacion.incoterm }}</td>
-                        <td class="px-3 py-4">{{ operacion.modo }}</td>
-                        <td class="px-3 py-4">
+                        <td class="px-4 py-4">{{ operacion.incoterm }}</td>
+                        <td class="px-4 py-4">{{ operacion.modo }}</td>
+                        <td class="px-4 py-4">
                             <span :class="['inline-flex rounded-full px-3 py-1 text-[10px] font-semibold leading-none', obtenerClaseEstado(operacion.estado)]">
                                 {{ operacion.estado }}
                             </span>
                         </td>
-                        <td class="px-3 py-4 text-[#686163]">{{ operacion.actualizacion }}</td>
-                        <td class="px-3 py-4 text-right">
+                        <td class="px-4 py-4 text-[#686163]">{{ operacion.actualizacion }}</td>
+                        <td class="px-4 py-4 text-right">
                             <button
                                 type="button"
-                                class="inline-flex rounded-md bg-[#f3eff0] px-4 py-2 text-[12px] text-[#4f4a4b] transition hover:bg-[#e8e1e3]"
+                                class="inline-flex rounded-md border border-[#e6dedf] bg-[#f8f4f5] px-4 py-2 text-[12px] font-semibold text-[#4f4a4b] transition hover:border-[#c9171d] hover:bg-[#c9171d] hover:text-white"
                             >
                                 Ver tracking
                             </button>
@@ -122,7 +122,7 @@ const paginas = computed(() => {
             </table>
         </div>
 
-        <div class="flex flex-col gap-3 border-t border-[#eee8ea] px-3 py-3 font-montserrat text-[11px] text-[#a39ca0] sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-col gap-3 border-t border-[#eee8ea] bg-[#fffdfd] px-4 py-3 font-montserrat text-[11px] text-[#8e8588] sm:flex-row sm:items-center sm:justify-between">
             <p>Mostrando {{ inicio }} - {{ fin }} de {{ totalRegistros }} operaciones</p>
 
             <div class="flex items-center justify-end gap-1 text-[#4f4a4b]">

@@ -1,11 +1,11 @@
 <template>
-    <div class="w-full max-w-6xl rounded-lg bg-white p-6 shadow-md">
+    <div class="amli-panel w-full max-w-6xl p-6">
         <div class="mb-6 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-[#303030]">Clientes</h1>
+            <h1 class="font-montserrat text-2xl font-bold text-[#303030]">Clientes</h1>
 
             <a
                 href="/anadir-cliente"
-                class="inline-block rounded-lg border border-[#E5E2F4] bg-[#54805B] px-6 py-2 font-medium text-white shadow-md transition-all hover:shadow-lg"
+                class="inline-flex rounded-lg border border-[#5b8a61] bg-[#5b8a61] px-6 py-2 font-montserrat text-[13px] font-semibold text-white shadow-[0_10px_20px_rgba(91,138,97,0.22)] transition hover:-translate-y-0.5 hover:bg-[#507b56]"
             >
                 Añadir cliente
             </a>
@@ -17,13 +17,13 @@
                     v-model="textoBusqueda"
                     type="text"
                     placeholder="Buscar clientes"
-                    class="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                    class="amli-input w-full"
                 />
             </div>
         </div>
 
         <div class="-mx-6">
-            <div class="border-t border-gray-300 bg-[#F3F0F4]/70"></div>
+            <div class="border-t border-[#ebe6e8] bg-[#f8f6f7]"></div>
 
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -142,5 +142,32 @@ thead {
     margin-right: -1.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+}
+
+thead {
+    background: #f8f6f7;
+    border-color: #ebe6e8;
+}
+
+thead tr {
+    color: #9f9699;
+    font-family: Montserrat, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+thead th {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+tbody tr {
+    border-color: #efe9eb;
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #fff8f8;
 }
 </style>

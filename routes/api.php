@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UsuariController;
 use App\Http\Controllers\OfertaController;
 use App\Http\Controllers\OperacioController;
+use App\Http\Controllers\NotificacionController;
 
 
 Route::middleware('api')->group(function () {
@@ -38,6 +39,10 @@ Route::get('/ofertas', [OfertaController::class, 'index'])->middleware('web');
     Route::get('/operaciones', [OperacioController::class, 'index'])->middleware('web');
     Route::get('/operaciones/{id}', [OperacioController::class, 'show'])->middleware('web');
     Route::patch('/operaciones/{id}/estado', [OperacioController::class, 'updateEstado'])->middleware('web');
+
+
+    //*Notificaciones*//
+Route::get('/notificaciones/ultimas', [NotificacionController::class, 'ultimas'])->middleware('web');
 
 });
 

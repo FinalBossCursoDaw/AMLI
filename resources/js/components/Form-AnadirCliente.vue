@@ -160,7 +160,7 @@ const hasError = (field: keyof FormData): boolean => {
 </script>
 
 <template>
-    <div class="max-w-4xl mx-auto p-8">
+    <div class="mx-auto max-w-4xl p-8">
         <!-- Mensaje de éxito/error -->
         <div v-if="message" :class="[
             'mb-6 p-4 rounded-lg',
@@ -171,11 +171,11 @@ const hasError = (field: keyof FormData): boolean => {
             {{ message.text }}
         </div>
 
-        <form @submit.prevent="handleSubmit" class="bg-white rounded-lg shadow-lg p-8 space-y-8">
+        <form @submit.prevent="handleSubmit" class="amli-panel space-y-8 p-8">
             
             <!-- Datos de la empresa -->
             <div class="space-y-4">
-                <h2 class="text-2xl font-montserrat font-bold text-[#303030] border-b-4 border-[#cb0c14] pb-2">
+                <h2 class="border-b-4 border-[#cb0c14] pb-2 font-montserrat text-2xl font-bold text-[#303030]">
                     Datos de la empresa
                 </h2>
                 
@@ -187,7 +187,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.nom_empresa"
                         type="text"
                         placeholder="Nombre de la empresa"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                        :class="['amli-input w-full px-4 py-3', 
                                  hasError('nom_empresa') ? 'border-red-500' : 'border-gray-300']"
                     />
                     <span v-if="hasError('nom_empresa')" class="text-red-500 text-sm mt-1 block">
@@ -203,7 +203,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.cif_nif"
                         type="text"
                         placeholder="CIF/NIF"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                        :class="['amli-input w-full px-4 py-3', 
                                  hasError('cif_nif') ? 'border-red-500' : 'border-gray-300']"
                     />
                     <span v-if="hasError('cif_nif')" class="text-red-500 text-sm mt-1 block">
@@ -214,7 +214,7 @@ const hasError = (field: keyof FormData): boolean => {
 
             <!-- Dirección -->
             <div class="space-y-4">
-                <h2 class="text-2xl font-montserrat font-bold text-[#303030] border-b-4 border-[#cb0c14] pb-2">
+                <h2 class="border-b-4 border-[#cb0c14] pb-2 font-montserrat text-2xl font-bold text-[#303030]">
                     Dirección
                 </h2>
 
@@ -224,7 +224,7 @@ const hasError = (field: keyof FormData): boolean => {
                     </label>
                     <select
                         v-model="formData.pais_id"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                        :class="['amli-input w-full px-4 py-3', 
                                  hasError('pais_id') ? 'border-red-500' : 'border-gray-300']"
                     >
                         <option value="">Selecciona un país</option>
@@ -244,7 +244,7 @@ const hasError = (field: keyof FormData): boolean => {
                         </label>
                         <select
                             v-model="formData.ciutat"
-                            :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                            :class="['amli-input w-full px-4 py-3', 
                                      hasError('ciutat') ? 'border-red-500' : 'border-gray-300']"
                             :disabled="!formData.pais_id"
                         >
@@ -266,7 +266,7 @@ const hasError = (field: keyof FormData): boolean => {
                             v-model="formData.codi_postal"
                             type="text"
                             placeholder="Código Postal"
-                            :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                            :class="['amli-input w-full px-4 py-3', 
                                      hasError('codi_postal') ? 'border-red-500' : 'border-gray-300']"
                         />
                         <span v-if="hasError('codi_postal')" class="text-red-500 text-sm mt-1 block">
@@ -283,7 +283,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.adreca"
                         placeholder="Dirección"
                         rows="3"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors resize-none', 
+                        :class="['amli-input w-full resize-none px-4 py-3', 
                                  hasError('adreca') ? 'border-red-500' : 'border-gray-300']"
                     ></textarea>
                     <span v-if="hasError('adreca')" class="text-red-500 text-sm mt-1 block">
@@ -294,7 +294,7 @@ const hasError = (field: keyof FormData): boolean => {
 
             <!-- Persona de contacto -->
             <div class="space-y-4">
-                <h2 class="text-2xl font-montserrat font-bold text-[#303030] border-b-4 border-[#cb0c14] pb-2">
+                <h2 class="border-b-4 border-[#cb0c14] pb-2 font-montserrat text-2xl font-bold text-[#303030]">
                     Persona de contacto
                 </h2>
 
@@ -306,7 +306,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.contacte"
                         type="text"
                         placeholder="Nombre del contacto"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                        :class="['amli-input w-full px-4 py-3', 
                                  hasError('contacte') ? 'border-red-500' : 'border-gray-300']"
                     />
                     <span v-if="hasError('contacte')" class="text-red-500 text-sm mt-1 block">
@@ -322,7 +322,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.email"
                         type="email"
                         placeholder="Correo Electrónico"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                        :class="['amli-input w-full px-4 py-3', 
                                  hasError('email') ? 'border-red-500' : 'border-gray-300']"
                     />
                     <span v-if="hasError('email')" class="text-red-500 text-sm mt-1 block">
@@ -338,7 +338,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.telefon"
                         type="tel"
                         placeholder="Teléfono"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors', 
+                        :class="['amli-input w-full px-4 py-3', 
                                  hasError('telefon') ? 'border-red-500' : 'border-gray-300']"
                     />
                     <span v-if="hasError('telefon')" class="text-red-500 text-sm mt-1 block">
@@ -354,7 +354,7 @@ const hasError = (field: keyof FormData): boolean => {
                         v-model="formData.observacions"
                         placeholder="Observaciones"
                         rows="3"
-                        :class="['w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-[#cb0c14] transition-colors resize-none', 
+                        :class="['amli-input w-full resize-none px-4 py-3', 
                                  hasError('observacions') ? 'border-red-500' : 'border-gray-300']"
                     ></textarea>
                     <span v-if="hasError('observacions')" class="text-red-500 text-sm mt-1 block">
@@ -368,14 +368,14 @@ const hasError = (field: keyof FormData): boolean => {
                 <button
                     type="button"
                     @click="resetForm"
-                    class="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    class="amli-btn-secondary px-6 py-3 disabled:opacity-50"
                     :disabled="loading"
                 >
                     Limpiar
                 </button>
                 <button
                     type="submit"
-                    class="px-6 py-3 bg-[#cb0c14] text-white font-semibold rounded-lg hover:bg-[#a90a10] transition-colors disabled:opacity-50 flex items-center gap-2"
+                    class="amli-btn-primary flex items-center gap-2 px-6 py-3 disabled:opacity-50"
                     :disabled="loading"
                 >
                     <span v-if="loading" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

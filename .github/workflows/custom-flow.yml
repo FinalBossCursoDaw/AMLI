@@ -1,0 +1,30 @@
+name: custom-flow
+
+# Valida la configuracion Docker del proyecto.
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create environment file
+        run: cp .env.example .env
+
+      # Comprueba que el compose es valido.
+      - name: Validate compose
+        run: docker compose config
+
+      - name: Build image
+        run: docker build -t amli-app .

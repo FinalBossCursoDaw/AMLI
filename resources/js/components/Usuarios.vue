@@ -1,7 +1,7 @@
 <template>
-    <div class="w-full max-w-6xl rounded-lg bg-white p-6 shadow-md">
+    <div class="amli-panel w-full max-w-6xl p-6">
         <div class="mb-6 flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-[#303030]">Usuarios</h1>
+            <h1 class="font-montserrat text-2xl font-bold text-[#303030]">Usuarios</h1>
         </div>
 
         <div class="mb-6 flex gap-4">
@@ -10,13 +10,13 @@
                     v-model="textoBusqueda"
                     type="text"
                     placeholder="Buscar usuarios"
-                    class="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                    class="amli-input w-full"
                 />
             </div>
         </div>
 
         <div class="-mx-6">
-            <div class="border-t border-gray-300 bg-[#F3F0F4]/70"></div>
+            <div class="border-t border-[#ebe6e8] bg-[#f8f6f7]"></div>
 
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -135,5 +135,32 @@ thead {
     margin-right: -1.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+}
+
+thead {
+    background: #f8f6f7;
+    border-color: #ebe6e8;
+}
+
+thead tr {
+    color: #9f9699;
+    font-family: Montserrat, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+thead th {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+tbody tr {
+    border-color: #efe9eb;
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #fff8f8;
 }
 </style>

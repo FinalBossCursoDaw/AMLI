@@ -17,29 +17,25 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         try {
-            // 1. Validar que lleguen los campos
             $request->validate([
                 'correu' => 'required|email',
                 'contrasenya' => 'required',
             ]);
 
-            // 2. Buscar el usuario manualmente para debug
             $user = \App\Models\Usuari::where('correu', $request->correu)->first();
-            
+
             if (!$user) {
                 return response()->json([
-                    'errors' => ['correu' => ['Usuario no encontrado.']]
+                    'errors' => ['correu' => ['Usuario no encontrado.']],
                 ], 422);
             }
 
-            // 3. Verificar contraseña manualmente
             if ($request->contrasenya !== $user->contrasenya) {
                 return response()->json([
-                    'errors' => ['correu' => ['Contraseña incorrecta.']]
+                    'errors' => ['correu' => ['Contrasena incorrecta.']],
                 ], 422);
             }
 
-            // 4. Login manual
             Auth::login($user);
 
             if ($user->rol_id == 1) {
@@ -52,7 +48,7 @@ class LoginController extends Controller
                 'success' => true,
                 'redirect' => $redirect,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'error' => 'Error en el servidor: ' . $e->getMessage()
             ], 500);

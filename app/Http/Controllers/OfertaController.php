@@ -7,6 +7,8 @@ use App\Models\Operacio;
 use App\Services\OperacioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notificacion;
+use Throwable;
 
 class OfertaController extends Controller
 {
@@ -116,6 +118,19 @@ $agentsComercials = DB::table('usuaris')
             'mida_contenidor' => $validated['mida_contenidor'] ?? null,
             'descripcio_producte' => $validated['descripcio_producte'] ?? null,
         ]);
+
+if ($oferta->agent_comercial_id) {
+    Notificacion::create([
+        'usuari_id' => $oferta->agent_comercial_id,
+        'tipus_notificacio_id' => 2,
+        'titol' => 'Nueva oferta creada',
+        'missatge' => 'Se ha creado la oferta ' . $oferta->codi_oferta,
+        'llegida' => 0,
+        'data_creacio' => now(),
+    ]);
+}
+
+
 
         return response()->json([
             'message' => 'Oferta creada correctamente',
@@ -527,6 +542,19 @@ public function aceptarOferta(string $id)
 
     // Crear operación desde la oferta aceptada
     $operacio = $this->crearOperacioSiFalta($oferta);
+
+
+    //crear notificacion para el operador asignado a la oferta
+    if ($oferta->operador_id) {
+    Notificacion::create([
+        'usuari_id' => $oferta->operador_id,
+        'tipus_notificacio_id' => 2,
+        'titol' => 'Oferta aceptada',
+        'missatge' => 'La oferta ' . $oferta->codi_oferta . ' ha sido aceptada',
+        'llegida' => 0,
+        'data_creacio' => now(),
+    ]);
+}
 
     return response()->json([
         'message' => 'Oferta aceptada correctamente y operación creada',

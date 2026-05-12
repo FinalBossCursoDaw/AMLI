@@ -217,7 +217,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class="min-h-screen bg-[#f3f1f3]">
+    <main class="amli-page">
         <div class="fixed inset-x-0 top-0 z-30">
             <HeaderRegistrado title="Crear Oferta" subtitle="Completa los datos para generar una oferta comercial" />
         </div>
@@ -227,7 +227,7 @@ onMounted(() => {
         <section class="pl-60 pr-4 pt-32 sm:pl-72 sm:pr-8 lg:pt-36">
             <div class="mx-auto max-w-[1120px]">
                 <div class="grid gap-6">
-                    <article class="rounded-xl border border-[#ddd6d8] bg-white shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
+                    <article class="amli-panel">
                         <div class="border-b border-[#ece6e8] px-6 py-5">
                             <div class="flex min-w-0 flex-1 items-center">
                                 <div class="flex items-center gap-3 text-[13px] font-medium">

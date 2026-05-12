@@ -32,7 +32,7 @@ const menuOperativo = computed(() => {
 </script>
 
 <template>
-    <main class="min-h-screen bg-[#f3f1f3]">
+    <main class="amli-page">
         <div class="fixed inset-x-0 top-0 z-30">
             <header-registrado title="Ofertas" subtitle="Consulta y gestiona tus ofertas" />
         </div>

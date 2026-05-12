@@ -79,7 +79,7 @@ const menuLateral = propiedades.tipoMenu === 'admin' ? menuAdministrador : menuO
 </script>
 
 <template>
-    <div class="min-h-screen bg-[#f3f1f3]">
+    <div class="amli-page">
         <div class="fixed inset-x-0 top-0 z-30">
             <HeaderRegistrado title="Anadir cliente" />
         </div>

@@ -1,24 +1,24 @@
 <template>
     <header-component />
-    <main class="min-h-screen bg-[#f3f1f3] relative overflow-hidden">
+    <main class="amli-page relative overflow-hidden">
         <!-- Elemento decorativo -->
         
         
- <div class="container mx-auto px-4 pt-24 pb-12 relative z-10">
+ <div class="container relative z-10 mx-auto px-4 pb-12 pt-24">
         
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-32">
+        <div class="mb-24 grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
             
-            <div>
-                <h1 class="text-5xl font-bold mb-6">
+            <div class="rounded-lg border border-[#ddd6d8] bg-white/80 p-8 shadow-[0_18px_42px_rgba(48,48,48,0.1)] backdrop-blur">
+                <h1 class="mb-6 font-montserrat text-5xl font-bold text-[#303030]">
                     Quienes <span class="text-red-600">somos</span>
                 </h1>
                 
-                <div class="mb-8 space-y-4">
-                    <p class="text-lg">
+                <div class="mb-8 space-y-4 font-montserrat text-[#4f4a4b]">
+                    <p class="text-lg leading-8">
                         <strong class="text-red-600">AMLI Logistics</strong> es una empresa especializada en la gestión de operaciones de <strong>importación y exportación internacional</strong>.
                     </p>
                     
-                    <p class="text-lg">
+                    <p class="text-lg leading-8">
                         Nuestra plataforma permite gestionar <strong>ofertas comerciales, operaciones logísticas</strong> y el <strong>seguimiento de envíos en tiempo real</strong>.
                     </p>
                 </div>
@@ -34,7 +34,7 @@
             
             <!-- Imagen Derecha -->
             <div class="flex flex-col items-center">
-                <img src="/imagenes/caminion.png" alt="Camión AMLI" class="max-w-full h-auto">
+                <img src="/imagenes/caminion.png" alt="Camión AMLI" class="h-auto max-w-full drop-shadow-[0_24px_30px_rgba(48,48,48,0.2)]">
                 
             </div>
         </div>

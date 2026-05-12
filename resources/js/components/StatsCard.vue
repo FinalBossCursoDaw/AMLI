@@ -1,24 +1,24 @@
 <template>
-    <div class="bg-white rounded-lg shadow-md p-3 flex items-center gap-2 w-56">
-        <div class="w-12 h-12">
+    <div class="group flex w-56 items-center gap-3 rounded-lg border border-[#ded7d9] bg-white p-4 shadow-[0_12px_26px_rgba(48,48,48,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(48,48,48,0.12)]">
+        <div class="flex h-12 w-12 flex-none items-center justify-center rounded-lg bg-[#fff3f3] transition group-hover:bg-[#ffe7e7]">
             <img 
                 v-if="props.iconoType === 'image'"
                 :src="props.icono"
                 :alt="props.label"
-                class="w-full h-full object-contain"
+                class="h-8 w-8 object-contain"
             />
             <div 
                 v-else
-                class="text-4xl flex items-center justify-center"
+                class="flex items-center justify-center text-3xl"
             >
                 {{ props.icono }}
             </div>
         </div>
         <div>
-            <p class="text-4xl font-bold text-[#303030]">
+            <p class="font-montserrat text-4xl font-bold leading-none text-[#303030]">
                 {{ numero }}
             </p>
-            <p class="text-lg text-[#666] font-medium">
+            <p class="mt-1 font-montserrat text-[14px] font-semibold text-[#696365]">
                 {{ props.label }}
             </p>
         </div>

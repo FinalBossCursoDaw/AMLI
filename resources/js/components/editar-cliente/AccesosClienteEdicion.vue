@@ -49,8 +49,8 @@ const guardarCambios = () => {
 </script>
 
 <template>
-    <section class="rounded-lg border border-[#d9d2d5] bg-white shadow-sm">
-        <div class="border-b border-[#e6e0e2] px-5 py-4">
+    <section class="amli-panel">
+        <div class="amli-panel-header py-4">
             <h2 class="font-montserrat text-[16px] font-semibold text-[#383536]">Accesos y permisos</h2>
         </div>
 
