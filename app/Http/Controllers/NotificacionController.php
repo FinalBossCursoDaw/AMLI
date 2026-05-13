@@ -19,7 +19,7 @@ class NotificacionController extends Controller
 
             $usuario = auth()->user();
 
-            //Buscar ultimas notificacion del usuario 
+            // Solo se muestran las notificaciones del usuario conectado.
             $notificaciones = Notificacion::where('usuari_id', $usuario->id)
                 ->orderByDesc('data_creacio')
                 ->limit(5)
@@ -27,10 +27,10 @@ class NotificacionController extends Controller
 
             return response()->json($notificaciones);
 
-     } catch (Throwable $e) {
-    return response()->json([
-        'message' => 'Error al obtener las notificaciones',
-    ], 500);
-}
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => 'Error al obtener las notificaciones',
+            ], 500);
+        }
     }
 }

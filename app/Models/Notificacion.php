@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notificacion extends Model
 {
-    // Nombre real de la tabla en la base de datos
+    // La tabla usa el nombre de la base de datos, no el plural automatico de Laravel.
     protected $table = 'notificacions';
 
+    // La fecha se guarda en data_creacio, por eso no usamos created_at ni updated_at.
     public $timestamps = false;
 
-    // Campos que permitimos insertar con create()
+    // Campos permitidos para insertar notificaciones con Notificacion::create().
     protected $fillable = [
         'usuari_id',
         'tipus_notificacio_id',

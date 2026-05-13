@@ -27,6 +27,7 @@ const cargarNotificaciones = async () => {
         cargando.value = true;
         error.value = '';
 
+        // La API ya filtra por el usuario autenticado.
         const response = await axios.get('/api/notificaciones/ultimas');
         notificaciones.value = response.data;
     } catch (e) {

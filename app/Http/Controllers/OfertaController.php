@@ -119,16 +119,17 @@ $agentsComercials = DB::table('usuaris')
             'descripcio_producte' => $validated['descripcio_producte'] ?? null,
         ]);
 
-if ($oferta->agent_comercial_id) {
-    Notificacion::create([
-        'usuari_id' => $oferta->agent_comercial_id,
-        'tipus_notificacio_id' => 2,
-        'titol' => 'Nueva oferta creada',
-        'missatge' => 'Se ha creado la oferta ' . $oferta->codi_oferta,
-        'llegida' => 0,
-        'data_creacio' => now(),
-    ]);
-}
+        // Avisamos al agente comercial asignado cuando se crea una nueva oferta.
+        if ($oferta->agent_comercial_id) {
+            Notificacion::create([
+                'usuari_id' => $oferta->agent_comercial_id,
+                'tipus_notificacio_id' => 2,
+                'titol' => 'Nueva oferta creada',
+                'missatge' => 'Se ha creado la oferta ' . $oferta->codi_oferta,
+                'llegida' => 0,
+                'data_creacio' => now(),
+            ]);
+        }
 
 
 
@@ -544,17 +545,17 @@ public function aceptarOferta(string $id)
     $operacio = $this->crearOperacioSiFalta($oferta);
 
 
-    //crear notificacion para el operador asignado a la oferta
+    // El operador recibe el aviso cuando el agente acepta la oferta.
     if ($oferta->operador_id) {
-    Notificacion::create([
-        'usuari_id' => $oferta->operador_id,
-        'tipus_notificacio_id' => 2,
-        'titol' => 'Oferta aceptada',
-        'missatge' => 'La oferta ' . $oferta->codi_oferta . ' ha sido aceptada',
-        'llegida' => 0,
-        'data_creacio' => now(),
-    ]);
-}
+        Notificacion::create([
+            'usuari_id' => $oferta->operador_id,
+            'tipus_notificacio_id' => 2,
+            'titol' => 'Oferta aceptada',
+            'missatge' => 'La oferta ' . $oferta->codi_oferta . ' ha sido aceptada',
+            'llegida' => 0,
+            'data_creacio' => now(),
+        ]);
+    }
 
     return response()->json([
         'message' => 'Oferta aceptada correctamente y operación creada',
