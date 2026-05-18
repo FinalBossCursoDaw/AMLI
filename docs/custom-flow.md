@@ -1,21 +1,26 @@
-# Flux personalitzat: validacio Docker
+# Workflow CI basico
 
-## Proposta
+## Proposito
 
-El tercer flux comprova que la configuracio Docker del projecte funciona abans de fusionar canvis a `develop` o `main`.
+Este proyecto usa un solo workflow de GitHub Actions: `.github/workflows/ci.yml`.
 
-## Que fa
+Su objetivo es comprobar lo minimo necesario antes de fusionar cambios: que la app instala dependencias, compila el frontend y pasa los tests.
 
-El fitxer `.github/workflows/custom-flow.yml` executa:
+## Que hace
 
-1. Copia `.env.example` a `.env` per poder validar la configuracio.
-2. Executa `docker compose config`.
-3. Construeix la imatge amb `docker build -t amli-app .`.
+El workflow ejecuta:
 
-## Valor aportat
+1. Descarga el codigo del repositorio.
+2. Instala PHP, Composer y Node.
+3. Instala dependencias PHP y frontend.
+4. Prepara Laravel.
+5. Compila los assets con `npm run build`.
+6. Ejecuta PHPUnit.
 
-Detecta errors basics del `Dockerfile` o del `docker-compose.yml` abans que arribin a la branca principal.
+## Valor aportado
 
-## Demostracio
+Es un workflow basico y suficiente para saber si el proyecto sigue funcionando.
 
-Es pot demostrar obrint una pull request o executant-lo manualment des de `Actions > custom-flow > Run workflow`.
+## Cuando se ejecuta
+
+Se ejecuta automaticamente al hacer `push` o `pull_request` hacia `develop` o `main`.

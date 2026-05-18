@@ -1,0 +1,50 @@
+name: ci
+
+# Se ejecuta al subir cambios o abrir pull requests contra develop/main.
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Descarga el codigo del repositorio en GitHub Actions.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Instala PHP y Composer para poder ejecutar Laravel y PHPUnit.
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+
+      # Instala Node para poder compilar el frontend con Vite.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # Instala las dependencias del backend y del frontend.
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          npm ci
+
+      # Prepara Laravel, compila assets y ejecuta los tests.
+      - name: Build and Test
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan ziggy:generate
+          npm run build
+          ./vendor/bin/phpunit
