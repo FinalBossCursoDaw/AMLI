@@ -87,6 +87,22 @@ Route::get('/operaciones', function () {
     return view('Operaciones');
 })->name('operaciones');
 
+//Tracking
+
+Route::get('/operaciones/{id}/tracking', function (string $id) {
+    if (!Auth::check()) {
+        return redirect('/register');
+    }
+
+    if (Auth::user()->rol_id == 1) {
+        return redirect('/dashboard-admin');
+    }
+
+    return view('Tracking', ['id' => $id]);
+})->where('id', '[A-Za-z0-9\-]+')->name('operaciones.tracking');
+
+
+
 
 Route::get('/contacto', function () {
     return view('Contacto');

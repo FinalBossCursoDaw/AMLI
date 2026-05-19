@@ -30,6 +30,9 @@ import QuienesSomos from './paginas/QuienesSomos.vue';
 import Valores from './components/Valores.vue';
 import DashboardAdministrador from './paginas/DashboardAdministrador.vue';
 
+import TrackingOperaciones from './components/operador/TrackingOperaciones.vue';
+
+
 window.__AMLI_BUILD__ = '2026-04-14T18:18Z';
 
 const app = createApp({});
@@ -63,4 +66,10 @@ app.component('quienes-somos', QuienesSomos);
 app.component('cards-component', CardsComponent);
 app.component('valores-component', Valores);
 app.component('DashboardAdmin', DashboardAdministrador);
+
+app.component('tracking-operaciones', TrackingOperaciones);
+
+    
 app.mount('#app');
+
+

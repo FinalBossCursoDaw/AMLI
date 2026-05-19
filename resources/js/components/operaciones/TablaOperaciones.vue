@@ -102,12 +102,11 @@ const paginas = computed(() => {
                         </td>
                         <td class="px-4 py-4 text-[#686163]">{{ operacion.actualizacion }}</td>
                         <td class="px-4 py-4 text-right">
-                            <button
-                                type="button"
-                                class="inline-flex rounded-md border border-[#e6dedf] bg-[#f8f4f5] px-4 py-2 text-[12px] font-semibold text-[#4f4a4b] transition hover:border-[#c9171d] hover:bg-[#c9171d] hover:text-white"
-                            >
+                            <a
+                                :href="`/operaciones/${operacion.id}/tracking`"
+                                class="inline-flex rounded-md border border-[#e6dedf] bg-[#f8f4f5] px-4 py-2 text-[12px] font-semibold text-[#4f4a4b] transition hover:border-[#c9171d] hover:bg-[#c9171d] hover:text-white"                            >
                                 Ver tracking
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
