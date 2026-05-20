@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OperacioController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/register');
 
@@ -89,17 +90,9 @@ Route::get('/operaciones', function () {
 
 //Tracking
 
-Route::get('/operaciones/{id}/tracking', function (string $id) {
-    if (!Auth::check()) {
-        return redirect('/register');
-    }
-
-    if (Auth::user()->rol_id == 1) {
-        return redirect('/dashboard-admin');
-    }
-
-    return view('Tracking', ['id' => $id]);
-})->where('id', '[A-Za-z0-9\-]+')->name('operaciones.tracking');
+Route::get('/operaciones/{id}/tracking', [OperacioController::class, 'tracking'])
+    ->where('id', '[A-Za-z0-9\-]+')
+    ->name('operaciones.tracking');
 
 
 

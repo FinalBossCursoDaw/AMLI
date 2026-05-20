@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Oferta;
 use Illuminate\Database\Eloquent\Model;
 
 class Operacio extends Model

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Operacio;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,7 @@ class OperacioController extends Controller
      */
     public function index(Request $request)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json([
                 'message' => 'Usuario no autenticado',
             ], 401);
@@ -82,7 +83,7 @@ class OperacioController extends Controller
      */
     public function show(string $id)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json([
                 'message' => 'Usuario no autenticado',
             ], 401);
@@ -102,7 +103,7 @@ class OperacioController extends Controller
 
         $operacio = $query->first();
 
-        if (!$operacio) {
+        if (! $operacio) {
             return response()->json([
                 'message' => 'Operación no encontrada',
             ], 404);
@@ -134,7 +135,7 @@ class OperacioController extends Controller
      */
     public function updateEstado(Request $request, string $id)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json([
                 'message' => 'Usuario no autenticado',
             ], 401);
@@ -163,7 +164,7 @@ class OperacioController extends Controller
 
         $operacio = $query->first();
 
-        if (!$operacio) {
+        if (! $operacio) {
             return response()->json([
                 'message' => 'Operación no encontrada',
             ], 404);
@@ -186,7 +187,7 @@ class OperacioController extends Controller
     // Métodos auxiliares
     private function obtenerCliente(?int $clientId): string
     {
-        if (!$clientId) {
+        if (! $clientId) {
             return '-';
         }
 
@@ -213,6 +214,7 @@ class OperacioController extends Controller
             $puerto = DB::table('ports')
                 ->where('id', $operacio->port_origen_id)
                 ->value('nom');
+
             return $puerto ?? '-';
         }
 
@@ -220,6 +222,7 @@ class OperacioController extends Controller
             $aeropuerto = DB::table('aeroports')
                 ->where('id', $operacio->aeroport_origen_id)
                 ->value('nom');
+
             return $aeropuerto ?? '-';
         }
 
@@ -232,6 +235,7 @@ class OperacioController extends Controller
             $puerto = DB::table('ports')
                 ->where('id', $operacio->port_desti_id)
                 ->value('nom');
+
             return $puerto ?? '-';
         }
 
@@ -239,6 +243,7 @@ class OperacioController extends Controller
             $aeropuerto = DB::table('aeroports')
                 ->where('id', $operacio->aeroport_desti_id)
                 ->value('nom');
+
             return $aeropuerto ?? '-';
         }
 
@@ -247,7 +252,7 @@ class OperacioController extends Controller
 
     private function obtenerIncoterm(?int $incotermId): string
     {
-        if (!$incotermId) {
+        if (! $incotermId) {
             return '-';
         }
 
@@ -255,7 +260,7 @@ class OperacioController extends Controller
             ->where('id', $incotermId)
             ->value('tipus_incoterm_id');
 
-        if (!$tipusIncotermId) {
+        if (! $tipusIncotermId) {
             return '-';
         }
 
@@ -294,7 +299,7 @@ class OperacioController extends Controller
 
     private function obtenerTipoContenedor(?int $tipoId): string
     {
-        if (!$tipoId) {
+        if (! $tipoId) {
             return '-';
         }
 
@@ -307,7 +312,7 @@ class OperacioController extends Controller
 
     private function obtenerTransportista(?int $transportistaId): string
     {
-        if (!$transportistaId) {
+        if (! $transportistaId) {
             return '-';
         }
 
@@ -320,13 +325,47 @@ class OperacioController extends Controller
 
     private function obtenerTiempoTranscurrido($fecha): string
     {
-        if (!$fecha) {
+        if (! $fecha) {
             return '-';
         }
 
         $ahora = now();
         $diferencia = $ahora->diffForHumans($fecha, ['parts' => 1, 'absolute' => true]);
 
-        return 'Hace ' . $diferencia;
+        return 'Hace '.$diferencia;
+    }
+
+    // tracking
+
+    public function tracking(string $id) 
+    {
+
+        if (!Auth::check()) {
+            return redirect('/register');
+        }
+
+        if (Auth::user()->rol_id == 1) {
+            return redirect('/dashboard-admin');
+        }
+
+        $operacio = Operacio::where('codi_operacio', $id) -> first();
+
+        if (! $operacio) {
+            return response()->json([
+                'message' => 'Operación no encontrada',
+            ], 404);
+        }
+
+        $cliente = $this->obtenerCliente($operacio->client_id);
+        $portOrigen = $this->obtenerOrigen($operacio);
+        $portDestino = $this->obtenerDestino($operacio);
+
+        // Hay que obtener el nombre del cliente, el puerto de origen y el puerto de destino para pasarselo al componente vue
+        return view('Tracking', [
+            'id' => $id,
+            'cliente' => $cliente,
+            'portOrigen' => $portOrigen,
+            'portDestino' => $portDestino,
+        ]);
     }
 }

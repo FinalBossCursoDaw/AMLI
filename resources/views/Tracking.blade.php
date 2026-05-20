@@ -16,9 +16,9 @@
         <!--el json_encode sirve para traducir valores php a un formato que entiende el vue-->
         <tracking-operaciones 
         :operacion-id="{{ json_encode($id) }}"
-        :cliente =""
+        :cliente ="{{ json_encode($cliente) }}"
         :puerto-origen="{{ json_encode($portOrigen) }}"
-        :puerto-destino=""
+        :puerto-destino="{{ json_encode($portDestino) }}"
         ></tracking-operaciones>
     </div>
 </body>

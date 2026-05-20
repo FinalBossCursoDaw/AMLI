@@ -1,3 +1,28 @@
+<script setup>
+import HeaderRegistrado from '../Header-registrado.vue';
+import NavIzquierda from '../Navizquierda.vue';
+import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
+import { computed } from 'vue';
+
+
+const props = defineProps({
+  operacionId: String,
+  cliente: String,
+  puertoOrigen: String,
+  puertoDestino: String,
+});
+
+
+const menuOperativo = computed(() => {
+    return [
+        { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
+        { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
+        { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
+    ];
+});
+</script>
+
+
 <template>
   <main class="amli-page">
     <div class="fixed inset-x-0 top-0 z-30">
@@ -40,16 +65,15 @@
             <div>
               <label class="block text-sm font-semibold text-[#353233] mb-4">Selecciona el paso</label>
               <select class="w-full rounded-lg border border-[#e6dedf] bg-white px-4 py-3 text-[#353233] font-medium focus:outline-none focus:border-[#c9171d] focus:ring-2 focus:ring-[#c9171d] focus:ring-opacity-10 transition">
-                <option value="">-- Selecciona un paso --</option>
-                <option value="1">Preparacio</option>
-                <option value="2">Transport interior origen</option>
-                <option value="3">Terminal/Port origen</option>
-                <option value="4">Carrega a bord</option>
-                <option value="5">Transit</option>
-                <option value="6">Port desti</option>
-                <option value="7">Aduana importacio</option>
-                <option value="8">Transport interior desti</option>
-                <option value="9">Entrega final</option>
+                <option value="1">1. Preparacio</option>
+                <option value="2">2. Transport interior origen</option>
+                <option value="3">3. Terminal/Port origen</option>
+                <option value="4">4. Carrega a bord</option>
+                <option value="5">5. Transit</option>
+                <option value="6">6. Port desti</option>
+                <option value="7">7. Aduana importacio</option>
+                <option value="8">8. Transport interior desti</option>
+                <option value="9">9. Entrega final</option>
               </select>
             </div>
 
@@ -84,28 +108,3 @@
     </section>
   </main>
 </template>
-
-<script setup>
-import Clientes from '../Clientes.vue';
-import HeaderRegistrado from '../Header-registrado.vue';
-import NavIzquierda from '../Navizquierda.vue';
-import { ClipboardDocumentListIcon, FolderIcon } from '@heroicons/vue/24/outline';
-import { computed } from 'vue';
-
-
-const props = defineProps({
-  operacionId: String,
-  Cliente: String,
-  puertoOrigen: String,
-  puertoDestino: String,
-});
-
-
-const menuOperativo = computed(() => {
-    return [
-        { id: 'dashboard', label: 'Dashboard', icon: '/imagenes/casita.png', path: '/dashboard-operador-cliente', iconType: 'image' },
-        { id: 'ofertas', label: 'Ofertas', icon: '', path: '/ofertas', iconType: 'component', iconComponent: ClipboardDocumentListIcon },
-        { id: 'operaciones', label: 'Operaciones', icon: '', path: '/operaciones', iconType: 'component', iconComponent: FolderIcon },
-    ];
-});
-</script>
